@@ -1,0 +1,63 @@
+// -------------------------------------
+// Susy Import
+// -------------------------------------
+//@import "susy";
+// -------------------------------------
+// Core Mixins
+// -------------------------------------
+@import "../core/core/mixins";
+// -------------------------------------
+// Variables Import
+// -------------------------------------
+// 載入全域變數
+@import "../core/core/variables";
+// -------------------------------------
+// Components / Modules Setting
+// -------------------------------------
+// 請輸入您的ClassName
+$classname: 'dateTab';
+// -------------------------------------
+// 您的CSS Code
+// -------------------------------------
+//以下範例可以刪除，改為您自已的CSS Code
+.#{$classname} {
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	.calendars_tabWrap{
+		background-color: #333333;
+		width: 100%;
+		
+	}
+	.ntb_tab{
+		
+		.tab{
+			list-style-type:none;
+			float: left;
+		}	
+	}
+
+
+	@media screen and (min-width: $screen-phone) { // 手機 320px
+
+	}
+	@media screen and (min-width: $screen-tablet) { // 平板 768px
+
+	}
+	@media screen and (min-width: $screen-desktop) { // 筆電、桌機 980px						
+
+	}
+	@media screen and (min-width: $screen-lg-desktop) { // 較大桌機　1280px
+
+	}
+	&.#{$classname}_default {
+		
+	}
+	& > .#{$classname}_child {
+		
+	}
+	& .#{$classname}_descendant {
+
+	}
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="../core/core.css" rel="stylesheet">
+	<link href="../ic-ln/css.css" rel="stylesheet">
+	<link href="./css.css" rel="stylesheet">
+	<title>Magaele: dateTab</title>
+<link href="css.css" rel="stylesheet"></head>
+<body>
+<div class="container">
+	<div class="row">
+        <div class="col-md-12">
+        <div class="calendar">
+            <div class="calendars_tabWrap">
+                <a href="#" class="prev on"></a>
+                <ul class="ntb_tab">
+                   <li class="tab">
+                       <a href="#"><span>2017 7月</span></a>
+                   </li>            
+                   <li class="tab">
+                       <a href="#"><span>2017 8月</span></a>
+                   </li>
+                   <li class="tab">
+                       <a href="#"><span>2017 9月</span></a>
+                   </li>                                                
+                </ul>
+                <a href="#" class="next on"></a>
+            </div>
+            <div class="calendars_weeksWrap">
+                <th>星期日</th>
+                <th>星期一</th>
+                <th>星期二</th>
+                <th>星期三</th>
+                <th>星期四</th>
+                <th>星期五</th>
+                <th>星期六</th>
+            </div>
+            <ul class="calendars_daysWrap">
+                <li class="calendars_days disabled"></li>
+                <li class="calendars_days hasData">
+                    <div class="date">
+                        <span class="num">1</span>
+                        <span class="weekday">星期四</span>
+                    </div>
+                    <span class="status">候補</span>
+                    <span class="sell">可賣：0</span>
+                    <span class="group">團位：0</span>
+                    <span class="tip"><i class="ic-ln productreferf"></i>保證出團</span>
+                    <span class="price">$4,999</span>
+                </li>
+                <li class="calendars_days hasData">
+                    <div class="date">
+                        <span class="num">1</span>
+                        <span class="weekday">星期五</span>
+                    </div>
+                    <span class="status">候補</span>
+                    <span class="sell">可賣：0</span>
+                    <span class="group">團位：0</span>
+                    <span class="tip"><i class="ic-ln productreferf"></i>保證出團</span>
+                    <span class="price">$4,999</span>
+                </li>
+            </ul>
+        </div><!-- calendar -->
+        </div>
+	</div>
+</div>
+<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="./module.js"></script>
+<script>
+$(function() {
+    $('.calendar').dateTab({
+        div: {
+            tabWrap:'<div class="calendars_tabWrap">',
+            weeksWrap: '<div class="calendars_weeksWrap">',
+        },
+        ul: {
+            ul: '<ul class="ntb_tab">',
+            li: '<li class="tab"><a href="#"><span>2017 7月</span></a></li>'
+        }
+   });
+});
+</script>
+<script type="text/javascript" src="module.js"></script></body>
+</html>
