@@ -207,9 +207,92 @@ var Module = function () {
 			var self = this;
 			var $this = this.$ele;
 			var options = this.option;
-			var $calendar = $this.find('.calendar');
 
-			$('.calendar').append('');
+			$('.calendar').append('<div class="calendars_tabWrap"></div>');
+			$('.calendars_tabWrap').append('<a href="#" class="prev on"></a><ul class="ntb_tab"><li class="tab"><a href="#"><span>2018 1月</span></a></li><li class="tab"><a href="#"><span>2018 2月</span></a></li><li class="tab"><a href="#"><span>2018 3月</span></a></li><li class="tab"><a href="#"><span>2018 4月</span></a></li><li class="tab"><a href="#"><span>2018 5月</span></a></li></ul><a href="#" class="next on"></a></div><table class="calendars_tableWrap"><thead><tr class="calendars_weeksWrap"><th>星期日</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th><th>星期六</th></tr></thead>');
+
+			$.ajax({
+				method: 'GET',
+				url: './json/data1.json',
+				dataType: 'json'
+			}).done(function (data) {
+				// $('.day_div').append('<div class="details"><span class="status">'+ data[0].guaranteed +'<span></div>')
+			});
+
+			self.creatCalendar();
+			self.onClickMonth();
+			self.onClickNext();
+		}
+	}, {
+		key: 'creatCalendar',
+		value: function creatCalendar() {
+			var today = new Date();
+			var year = today.getFullYear();
+			var month = today.getMonth() + 1;
+			var day = today.getDate();
+
+			//本月的第一天是星期幾(距星期日的天數)
+			var startDay = new Date(year, month - 1, 1).getDay();
+			var nextStartDay = startDay - 1;
+
+			//本月有多少天 可以用上個月的0 來表示這個月的最後一天
+			var nDays = new Date(year, month, 0).getDate();
+
+			var numRow = 0; //到達7的時候創建tr
+			var i = void 0; //日期
+			var html = '';
+
+			html += '<tbody>';
+			html += '<tr class="days">';
+
+			//月曆開頭
+			for (i = 0; i < startDay; i++) {
+				html += '<td class="day disabled"><div class="day_div"><span class="num"></span></div></td>';
+				numRow++;
+			}
+
+			//本月日期
+			for (var j = 1; j <= nDays; j++) {
+				html += '<td class="day"><div class="day_div"><span class="num">' + j + '</span></div></td>';
+				numRow++;
+				if (numRow == 7) {
+					//如果已經到一行（一週）了，建造新的tr
+					numRow = 0;
+					html += '</tr><tr class="days">';
+				}
+			}
+
+			//本月結尾
+			var lastDay = startDay + nDays;
+			for (i = lastDay; i < 42; i++) {
+				html += '<td class="day disabled"><div class="day_div"><span class="num"></span></div></td>';
+				numRow++;
+				if (numRow == 7) {
+					//如果已經到一行（一週）了，建造新的tr
+					numRow = 0;
+					html += '</tr><tr class="days">';
+				}
+			}
+
+			$('.calendars_tableWrap').append('' + html + '');
+		}
+	}, {
+		key: 'onClickMonth',
+		value: function onClickMonth() {
+			var self = this;
+			var $tab_span = $('.tab span');
+			$tab_span.on('click', function () {
+				$tab_span.removeClass('tab_active');
+				$(this).addClass('tab_active');
+				// self.creatCalendar();
+			});
+		}
+	}, {
+		key: 'onClickNext',
+		value: function onClickNext() {
+			$('.next').on('click', function () {
+				$('.ntb_tab').css('left', '195px');
+			});
 		}
 	}]);
 
