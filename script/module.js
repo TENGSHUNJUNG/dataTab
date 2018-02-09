@@ -21,7 +21,7 @@ class Module {
 
 
 		$('.calendar').append('<div class="calendars_tabWrap"></div>');
-		$('.calendars_tabWrap').append('<a href="#" class="prev on"></a><ul class="ntb_tab"><li class="tab"><a href="#"><span>2018 1月</span></a></li><li class="tab"><a href="#"><span>2018 2月</span></a></li><li class="tab"><a href="#"><span>2018 3月</span></a></li><li class="tab"><a href="#"><span>2018 4月</span></a></li><li class="tab"><a href="#"><span>2018 5月</span></a></li></ul><a href="#" class="next on"></a></div><table class="calendars_tableWrap"><thead><tr class="calendars_weeksWrap"><th>星期日</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th><th>星期六</th></tr></thead>');
+		$('.calendars_tabWrap').append('<a href="#" class="prev on"></a><ul class="ntb_tab"></ul><a href="#" class="next on"></a></div><table class="calendars_tableWrap"><thead><tr class="calendars_weeksWrap"><th>星期日</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th><th>星期六</th></tr></thead>');
 
 		$.ajax({
 			method: 'GET',
@@ -32,29 +32,41 @@ class Module {
 		});
 
 
+		
+		self.creatMonth();
 		self.creatCalendar();
 		self.onClickMonth();
-		self.onClickNext();
 	}
 
 
-
+	creatMonth () {
+		let initYearMonth = this.option.initYearMonth ;
+		let html = '';
+		let year = new Date(initYearMonth).getFullYear();
+		let month = new Date(initYearMonth).getMonth()+1;
+		let i;
+		for ( i = 0 ; i < 4 ; i++ ) {
+			html += '<li class="tab"><a href="#"><span>' + year +' '+ (month+i) +'月'+'</span></a></li>'
+		}
+		$('.ntb_tab').append(''+ html +'');
+	}
 
 
 	creatCalendar () {
+		$('.tab:first-child a span').addClass('tab_active');
+		let initYearMonth = this.option.initYearMonth ;
 		let today = new Date();
-        let year = today.getFullYear();
-        let month = today.getMonth()+1;
+        let year = new Date(initYearMonth).getFullYear();
+        let month = new Date(initYearMonth).getMonth()+1;
+        console.log(month)
         let day = today.getDate();
 
         //本月的第一天是星期幾(距星期日的天數)
         let startDay = new Date(year, month - 1, 1).getDay();
         let nextStartDay = startDay - 1 ;
 
-
         //本月有多少天 可以用上個月的0 來表示這個月的最後一天
         let nDays = new Date(year, month, 0).getDate();
-
 
         let numRow = 0;  //到達7的時候創建tr
         let i;        //日期
@@ -94,21 +106,87 @@ class Module {
     	$('.calendars_tableWrap').append(''+ html +'');
 	}
 
+
 	onClickMonth () {
 		let self = this;
-		let $tab_span = $('.tab span') ;
-		$tab_span.on('click',function(){
-			$tab_span.removeClass('tab_active');
-			$(this).addClass('tab_active');
+		let $this = this.$ele;
+		let options = this.option;
+		let srcollWidth = $('.tab').width();
+		let num = 0 ;
+
+
+		$('.tab').on('click',function(){
+			num = $(this).index();
+			$('.tab span').removeClass('tab_active');
+			$(this).children().children().addClass('tab_active');
 		// self.creatCalendar();
 		});
+
+
+
+
+		//左邊箭頭
+		$('.prev').on('click',function(){
+			// $('.tab span').removeClass('tab_active');
+			$this.find('.tab_active').parent().parent().prev().children().children().addClass('tab_active');
+			// $(this).children().children().addClass('tab_active');
+
+			if(num > 2){
+        		num = num - 2;
+			$('.tab').animate({
+				left: "+="+ srcollWidth +"",
+			},0) ;
+			}
+		});
+
+		//右邊箭頭
+		$('.next').on('click',function(){
+			$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
+
+			if(num < 2 ){
+        		num = num + 2;
+        		console.log(num)
+			$('.tab').animate({
+				left: "-="+ srcollWidth +"",
+			},0) ;
+			}
+		});
+
+
+
 	}
 
-	onClickNext () {
-		$('.next').on('click',function(){
-			$('.ntb_tab').css('left','195px');
-		});
-	}
+
+	// onClickPrev () {
+	// 	let srcollWidth = $('.tab').width();
+	// 	let srcollCount = srcollWidth * 5 ;
+	// 	let num = 0;
+	// 	$('.prev').on('click',function(){
+	// 		if(num>0){
+ //        		num=num-1;
+ //        	console.log(num)
+	// 		$('.tab').animate({
+	// 			left: "+="+ srcollWidth +"",
+	// 		},0) ;
+	// 		}
+	// 	});
+	// }
+
+
+	// onClickNext () {
+	// 	let srcollWidth = $('.tab').width();
+	// 	let srcollCount = srcollWidth * 5 ;
+	// 	let num = 0;
+	// 	$('.next').on('click',function(){
+	// 		if(num< (srcollCount-1) ){
+ //        		num=num+1;
+ //        		console.log(num)
+	// 		$('.tab').animate({
+	// 			left: "-="+ srcollWidth +"",
+	// 		},0) ;
+	// 		}
+	// 	});
+	// }
 
 };
 

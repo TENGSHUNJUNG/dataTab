@@ -209,7 +209,7 @@ var Module = function () {
 			var options = this.option;
 
 			$('.calendar').append('<div class="calendars_tabWrap"></div>');
-			$('.calendars_tabWrap').append('<a href="#" class="prev on"></a><ul class="ntb_tab"><li class="tab"><a href="#"><span>2018 1月</span></a></li><li class="tab"><a href="#"><span>2018 2月</span></a></li><li class="tab"><a href="#"><span>2018 3月</span></a></li><li class="tab"><a href="#"><span>2018 4月</span></a></li><li class="tab"><a href="#"><span>2018 5月</span></a></li></ul><a href="#" class="next on"></a></div><table class="calendars_tableWrap"><thead><tr class="calendars_weeksWrap"><th>星期日</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th><th>星期六</th></tr></thead>');
+			$('.calendars_tabWrap').append('<a href="#" class="prev on"></a><ul class="ntb_tab"></ul><a href="#" class="next on"></a></div><table class="calendars_tableWrap"><thead><tr class="calendars_weeksWrap"><th>星期日</th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th><th>星期六</th></tr></thead>');
 
 			$.ajax({
 				method: 'GET',
@@ -219,16 +219,32 @@ var Module = function () {
 				// $('.day_div').append('<div class="details"><span class="status">'+ data[0].guaranteed +'<span></div>')
 			});
 
+			self.creatMonth();
 			self.creatCalendar();
 			self.onClickMonth();
-			self.onClickNext();
+		}
+	}, {
+		key: 'creatMonth',
+		value: function creatMonth() {
+			var initYearMonth = this.option.initYearMonth;
+			var html = '';
+			var year = new Date(initYearMonth).getFullYear();
+			var month = new Date(initYearMonth).getMonth() + 1;
+			var i = void 0;
+			for (i = 0; i < 4; i++) {
+				html += '<li class="tab"><a href="#"><span>' + year + ' ' + (month + i) + '月' + '</span></a></li>';
+			}
+			$('.ntb_tab').append('' + html + '');
 		}
 	}, {
 		key: 'creatCalendar',
 		value: function creatCalendar() {
+			$('.tab:first-child a span').addClass('tab_active');
+			var initYearMonth = this.option.initYearMonth;
 			var today = new Date();
-			var year = today.getFullYear();
-			var month = today.getMonth() + 1;
+			var year = new Date(initYearMonth).getFullYear();
+			var month = new Date(initYearMonth).getMonth() + 1;
+			console.log(month);
 			var day = today.getDate();
 
 			//本月的第一天是星期幾(距星期日的天數)
@@ -280,20 +296,77 @@ var Module = function () {
 		key: 'onClickMonth',
 		value: function onClickMonth() {
 			var self = this;
-			var $tab_span = $('.tab span');
-			$tab_span.on('click', function () {
-				$tab_span.removeClass('tab_active');
-				$(this).addClass('tab_active');
+			var $this = this.$ele;
+			var options = this.option;
+			var srcollWidth = $('.tab').width();
+			var num = 0;
+
+			$('.tab').on('click', function () {
+				num = $(this).index();
+				$('.tab span').removeClass('tab_active');
+				$(this).children().children().addClass('tab_active');
 				// self.creatCalendar();
 			});
-		}
-	}, {
-		key: 'onClickNext',
-		value: function onClickNext() {
+
+			//左邊箭頭
+			$('.prev').on('click', function () {
+				// $('.tab span').removeClass('tab_active');
+				$this.find('.tab_active').parent().parent().prev().children().children().addClass('tab_active');
+				// $(this).children().children().addClass('tab_active');
+
+				if (num > 2) {
+					num = num - 2;
+					$('.tab').animate({
+						left: "+=" + srcollWidth + ""
+					}, 0);
+				}
+			});
+
+			//右邊箭頭
 			$('.next').on('click', function () {
-				$('.ntb_tab').css('left', '195px');
+				$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
+
+				if (num < 2) {
+					num = num + 2;
+					console.log(num);
+					$('.tab').animate({
+						left: "-=" + srcollWidth + ""
+					}, 0);
+				}
 			});
 		}
+
+		// onClickPrev () {
+		// 	let srcollWidth = $('.tab').width();
+		// 	let srcollCount = srcollWidth * 5 ;
+		// 	let num = 0;
+		// 	$('.prev').on('click',function(){
+		// 		if(num>0){
+		//        		num=num-1;
+		//        	console.log(num)
+		// 		$('.tab').animate({
+		// 			left: "+="+ srcollWidth +"",
+		// 		},0) ;
+		// 		}
+		// 	});
+		// }
+
+
+		// onClickNext () {
+		// 	let srcollWidth = $('.tab').width();
+		// 	let srcollCount = srcollWidth * 5 ;
+		// 	let num = 0;
+		// 	$('.next').on('click',function(){
+		// 		if(num< (srcollCount-1) ){
+		//        		num=num+1;
+		//        		console.log(num)
+		// 		$('.tab').animate({
+		// 			left: "-="+ srcollWidth +"",
+		// 		},0) ;
+		// 		}
+		// 	});
+		// }
+
 	}]);
 
 	return Module;
