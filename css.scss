@@ -39,6 +39,7 @@ $classname: 'dateTab';
 				margin-top: 6px;
 				position: absolute;
 				background-color: #ede9dd;
+				z-index: 999;
 				&:before{
 					content: '';
 					border-style: solid;
@@ -62,12 +63,13 @@ $classname: 'dateTab';
 	}
 	.ntb_tab{
 		background-color: #ede9dd;
-		width: 975px;
+		width: 100%;
 		display: flex;
 		justify-content:center;
 		.tab{
 			list-style-type:none;
-			width: 195px;
+			width: 33.3%;
+			position: relative;
 			a{
 				text-decoration: none;
 				span{
