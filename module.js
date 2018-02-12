@@ -208,6 +208,8 @@ var Module = function () {
 			var $this = this.$ele;
 			var options = this.option;
 
+			self.creatWeek();
+			self.creatMonth();
 			self.ajaxGetJson();
 			self.onClickMonth();
 		}
@@ -225,15 +227,12 @@ var Module = function () {
 				dataSort = dataSort.sort(function (a, b) {
 					return a.date > b.date ? 1 : -1;
 				});
+				// self.creatWeek();
+				// self.creatMonth();
+				self.creatCalendar(dataSort);
 			});
 
-			self.creatWeek();
-			self.creatMonth();
-			self.creatCalendar();
-			// var nowYear = $(".tab_active").text().slice(0, 4);
-			// var nowMonth = $(".tab_active").text().slice(4, 8);
-			// console.log(nowYear);
-			// console.log(nowMonth);
+			// self.creatCalendar();
 		}
 	}, {
 		key: 'creatWeek',
@@ -241,9 +240,6 @@ var Module = function () {
 			$('.calendar').append('<div class="calendars_tabWrap">');
 			$('.calendars_tabWrap').append('<a href="#" class="prev on"></a>' + '<ul class="ntb_tab"></ul>' + '<a href="#" class="next on"></a></div>' + '<table class="calendars_tableWrap">' + '<thead>' + '<tr class="calendars_weeksWrap">' + '<th>星期日</th>' + '<th>星期一</th>' + '<th>星期二</th>' + '<th>星期三</th>' + '<th>星期四</th>' + '<th>星期五</th>' + '<th>星期六</th>' + '</tr>' + '</thead>');
 		}
-
-		//產生月份 跟 日期 尚未同步!!!!!!
-
 	}, {
 		key: 'creatMonth',
 		value: function creatMonth() {
@@ -252,8 +248,6 @@ var Module = function () {
 			var initYearMonth = this.option.initYearMonth;
 			var $ntb_tab = $this.find('.ntb_tab');
 			var html = '';
-			// let year = new Date(initYearMonth).getFullYear();
-			// let month = new Date(initYearMonth).getMonth()+1;
 			var i = void 0;
 			for (i = 0; i <= 2; i++) {
 				var nextMonth = moment().add(i, 'months').format("YYYY MMM");
@@ -264,23 +258,12 @@ var Module = function () {
 		}
 	}, {
 		key: 'creatCalendar',
-		value: function creatCalendar() {
-
-			$.ajax({
-				method: 'GET',
-				url: './json/data1.json',
-				dataType: 'json'
-			}).done(function (dataSort) {
-				dataSort = dataSort.sort(function (a, b) {
-					return a.date > b.date ? 1 : -1;
-				});
-			});
+		value: function creatCalendar(dataSort) {
 
 			var initYearMonth = this.option.initYearMonth;
 			var today = new Date();
-			// let year = new Date(initYearMonth).getFullYear();
-			// let month = new Date(initYearMonth).getMonth()+1;
 
+			//抓取active選擇到的年、月份
 			var year = parseInt($(".tab_active").text().slice(0, 4));
 			var month = parseInt($(".tab_active").text().slice(4, 8));
 			console.log(year);
@@ -310,7 +293,15 @@ var Module = function () {
 
 			//本月日期
 			for (var j = 1; j <= nDays; j++) {
-				html += '<td class="day"><div class="day_div"><span class="num">' + j + '</span></div></td>';
+				if (month < 10 && j < 10) {
+					html += '<td class="day ' + year + '0' + month + '0' + j + '"><div class="day_div"><span class="num">' + j + '</span></div></td>';
+				} else if (month < 10) {
+					html += '<td class="day ' + year + '0' + month + j + '"><div class="day_div"><span class="num">' + j + '</span></div></td>';
+				} else if (j < 10) {
+					html += '<td class="day ' + year + month + '0' + j + '"><div class="day_div"><span class="num">' + j + '</span></div></td>';
+				} else {
+					html += '<td class="day ' + year + month + j + '"><div class="day_div"><span class="num">' + j + '</span></div></td>';
+				}
 				numRow++;
 				if (numRow == 7) {
 					//如果已經到一行（一週）了，建造新的tr
@@ -330,8 +321,26 @@ var Module = function () {
 					html += '</tr><tr class="days">';
 				}
 			}
-
 			$('.calendars_tableWrap').append(html + '</tbody></table></div>');
+
+			var dataOfDate = dataSort.length;
+
+			for (i = 0; i < dataOfDate; i++) {
+				var self = this;
+				var $this = this.$ele;
+				var dataYear = dataSort[i].date.substring(0, 4);
+				var dataMonth = dataSort[i].date.substring(5, 7);
+				var dataDay = dataSort[i].date.substring(8, 10);
+				var data_date = parseInt(dataYear + dataMonth + dataDay);
+
+				console.log(data_date);
+
+				//price的class還沒設定 明天接著做完!!!!!!!!
+				if ($('.day').hasClass(data_date)) {
+					var price = "<span class='price'>" + "$" + dataSort[i].price + "起" + "</span>";
+					$('.' + data_date + '').append(price);
+				}
+			}
 		}
 	}, {
 		key: 'onClickMonth',
@@ -342,15 +351,12 @@ var Module = function () {
 			var initYearMonth = this.option.initYearMonth;
 			var $tab = $this.find('.tab');
 			var srcollWidth = $this.find('.tab').width();
-			var num = 0;
 
 			$tab.on('click', function () {
 				$this.find('.tbody').remove();
-				num = $(this).index();
 				$('.tab span').removeClass('tab_active');
 				$(this).children().children().addClass('tab_active');
-				self.creatCalendar();
-				// self.creatCalendar();
+				self.ajaxGetJson();
 			});
 
 			//左邊箭頭
@@ -359,14 +365,7 @@ var Module = function () {
 
 				$this.find('.tab_active').parent().parent().prev().children().children().addClass('tab_active');
 				$this.find('.tab_active').parent().parent().next().children().children().removeClass('tab_active');
-				self.creatCalendar();
-
-				// if(num > 2){
-				//      		num = num - 2;
-				// $('.tab').animate({
-				// 	left: "+="+ srcollWidth +"",
-				// },0) ;
-				// }
+				self.ajaxGetJson();
 			});
 
 			//右邊箭頭
@@ -375,15 +374,7 @@ var Module = function () {
 
 				$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
 				$this.find('.tab_active').parent().parent().prev().children().children().removeClass('tab_active');
-				self.creatCalendar();
-
-				// if(num < 2 ){
-				//      		num = num + 2;
-				//      		console.log(num)
-				// $('.tab').animate({
-				// 	left: "-="+ srcollWidth +"",
-				// },0) ;
-				// }
+				self.ajaxGetJson();
 			});
 		}
 

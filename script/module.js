@@ -19,7 +19,8 @@ class Module {
 		let options = this.option;
 
 
-		
+		self.creatWeek();
+		self.creatMonth();
 		self.ajaxGetJson();
 		self.onClickMonth();
 	}
@@ -42,15 +43,13 @@ class Module {
 			dataSort = dataSort.sort(function(a,b){ 
 				return a.date > b.date ? 1 : -1;
 			})
+		// self.creatWeek();
+		// self.creatMonth();
+		self.creatCalendar(dataSort);
+
 		});
 
-		self.creatWeek();
-		self.creatMonth();
-		self.creatCalendar();
-        // var nowYear = $(".tab_active").text().slice(0, 4);
-        // var nowMonth = $(".tab_active").text().slice(4, 8);
-        // console.log(nowYear);
-        // console.log(nowMonth);
+		// self.creatCalendar();
 	}
 
 
@@ -77,15 +76,12 @@ class Module {
 
 
 
-   //產生月份 跟 日期 尚未同步!!!!!!
 	creatMonth () {
 		let self = this ;
 		let $this = this.$ele ;
 		let initYearMonth = this.option.initYearMonth ;
 		let $ntb_tab = $this.find('.ntb_tab') ;
 		let html = '';
-		// let year = new Date(initYearMonth).getFullYear();
-		// let month = new Date(initYearMonth).getMonth()+1;
 		let i;
 		for ( i = 0 ; i <= 2 ; i++ ) {
 			let nextMonth = moment().add(i, 'months').format("YYYY MMM");
@@ -97,25 +93,12 @@ class Module {
 
 
 
-	creatCalendar () {
-
-
-		$.ajax({
-			method: 'GET',
-			url: './json/data1.json',
-			dataType: 'json'
-		}).done(function(dataSort) {
-			dataSort = dataSort.sort(function(a,b){ 
-				return a.date > b.date ? 1 : -1;
-			})
-		});
-
+	creatCalendar (dataSort) {
 
 		let initYearMonth = this.option.initYearMonth ;
 		let today = new Date();
-        // let year = new Date(initYearMonth).getFullYear();
-        // let month = new Date(initYearMonth).getMonth()+1;
 
+		//抓取active選擇到的年、月份
         let year = parseInt($(".tab_active").text().slice(0, 4));
         let month = parseInt($(".tab_active").text().slice(4, 8));
         console.log(year)
@@ -146,8 +129,16 @@ class Module {
     	}
 
     	//本月日期
-    	for (var j = 1; j <= nDays; j++) {
-			html += '<td class="day"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+    	for (let j = 1; j <= nDays; j++) {
+    		if( month < 10 && j < 10 ){
+				html += '<td class="day ' + year +'0'+ month + '0' +j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+			}else if( month < 10 ){
+				html += '<td class="day ' + year +'0'+ month + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+			}else if( j < 10 ){
+				html += '<td class="day ' + year + month + '0' + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+			}else{
+				html += '<td class="day ' + year + month + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+			}
             numRow++;
         if (numRow == 7) {  //如果已經到一行（一週）了，建造新的tr
             numRow = 0;
@@ -165,17 +156,31 @@ class Module {
             html += '</tr><tr class="days">';
             }
     	}
-
     	$('.calendars_tableWrap').append(html + '</tbody></table></div>');
+
+
+    	let dataOfDate = dataSort.length;
+
+            for (i=0; i<dataOfDate; i++){
+                let self = this;
+                let $this = this.$ele;
+                let dataYear = dataSort[i].date.substring(0,4);
+                let dataMonth = dataSort[i].date.substring(5,7);
+                let dataDay = dataSort[i].date.substring(8,10);
+                let data_date = parseInt(dataYear + dataMonth + dataDay);
+
+                console.log(data_date);
+
+                //price的class還沒設定 明天接著做完!!!!!!!!
+                if($('.day').hasClass(data_date)){
+                	let price = "<span class='price'>"+"$"+dataSort[i].price+"起"+"</span>";
+                	$('.'+data_date+'').append(price);
+                }
+
+            }
+
+
 	}
-
-
-
-
-
-
-
-
 
 
 
@@ -186,16 +191,13 @@ class Module {
 		let initYearMonth = this.option.initYearMonth ;
 		let $tab = $this.find('.tab');
 		let srcollWidth = $this.find('.tab').width();
-		let num = 0 ;
 
 
 		$tab.on('click',function(){
 			$this.find('.tbody').remove();
-			num = $(this).index();
 			$('.tab span').removeClass('tab_active');
 			$(this).children().children().addClass('tab_active');
-			self.creatCalendar();
-		// self.creatCalendar();
+			self.ajaxGetJson();
 		});
 
 
@@ -207,19 +209,13 @@ class Module {
 			
 			$this.find('.tab_active').parent().parent().prev().children().children().addClass('tab_active');
 			$this.find('.tab_active').parent().parent().next().children().children().removeClass('tab_active');
-			self.creatCalendar();
+			self.ajaxGetJson();
 			
-
-
-
-
-			// if(num > 2){
-   //      		num = num - 2;
-			// $('.tab').animate({
-			// 	left: "+="+ srcollWidth +"",
-			// },0) ;
-			// }
 		});
+
+
+
+
 
 		//右邊箭頭
 		$('.next').on('click',function(){
@@ -228,18 +224,9 @@ class Module {
 			
 			$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
 			$this.find('.tab_active').parent().parent().prev().children().children().removeClass('tab_active');
-			self.creatCalendar();
+			self.ajaxGetJson();
 
 
-
-
-			// if(num < 2 ){
-   //      		num = num + 2;
-   //      		console.log(num)
-			// $('.tab').animate({
-			// 	left: "-="+ srcollWidth +"",
-			// },0) ;
-			// }
 		});
 
 
