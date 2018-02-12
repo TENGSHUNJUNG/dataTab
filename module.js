@@ -230,6 +230,10 @@ var Module = function () {
 			self.creatWeek();
 			self.creatMonth();
 			self.creatCalendar();
+			// var nowYear = $(".tab_active").text().slice(0, 4);
+			// var nowMonth = $(".tab_active").text().slice(4, 8);
+			// console.log(nowYear);
+			// console.log(nowMonth);
 		}
 	}, {
 		key: 'creatWeek',
@@ -248,23 +252,39 @@ var Module = function () {
 			var initYearMonth = this.option.initYearMonth;
 			var $ntb_tab = $this.find('.ntb_tab');
 			var html = '';
-			var year = new Date(initYearMonth).getFullYear();
-			var month = new Date(initYearMonth).getMonth() + 1;
+			// let year = new Date(initYearMonth).getFullYear();
+			// let month = new Date(initYearMonth).getMonth()+1;
 			var i = void 0;
 			for (i = 0; i <= 2; i++) {
 				var nextMonth = moment().add(i, 'months').format("YYYY MMM");
-				console.log(nextMonth);
 				html += '<li class="tab"><a href="#"><span>' + nextMonth + '</span></a></li>';
 			}
 			$ntb_tab.append(html);
+			$('.tab:first-child a span').addClass('tab_active');
 		}
 	}, {
 		key: 'creatCalendar',
 		value: function creatCalendar() {
+
+			$.ajax({
+				method: 'GET',
+				url: './json/data1.json',
+				dataType: 'json'
+			}).done(function (dataSort) {
+				dataSort = dataSort.sort(function (a, b) {
+					return a.date > b.date ? 1 : -1;
+				});
+			});
+
 			var initYearMonth = this.option.initYearMonth;
 			var today = new Date();
-			var year = new Date(initYearMonth).getFullYear();
-			var month = new Date(initYearMonth).getMonth() + 1;
+			// let year = new Date(initYearMonth).getFullYear();
+			// let month = new Date(initYearMonth).getMonth()+1;
+
+			var year = parseInt($(".tab_active").text().slice(0, 4));
+			var month = parseInt($(".tab_active").text().slice(4, 8));
+			console.log(year);
+			console.log(month);
 
 			var day = today.getDate();
 
@@ -278,8 +298,6 @@ var Module = function () {
 			var numRow = 0; //到達7的時候創建tr
 			var i = void 0; //日期
 			var html = '';
-
-			$('.tab:first-child a span').addClass('tab_active');
 
 			html += '<tbody class="tbody">';
 			html += '<tr class="days">';
@@ -327,19 +345,21 @@ var Module = function () {
 			var num = 0;
 
 			$tab.on('click', function () {
+				$this.find('.tbody').remove();
 				num = $(this).index();
 				$('.tab span').removeClass('tab_active');
 				$(this).children().children().addClass('tab_active');
+				self.creatCalendar();
 				// self.creatCalendar();
 			});
 
 			//左邊箭頭
 			$('.prev').on('click', function () {
-				// $('.tab span').removeClass('tab_active');
+				$this.find('.tbody').remove();
+
 				$this.find('.tab_active').parent().parent().prev().children().children().addClass('tab_active');
 				$this.find('.tab_active').parent().parent().next().children().children().removeClass('tab_active');
-				// $(this).children().children().addClass('tab_active');
-
+				self.creatCalendar();
 
 				// if(num > 2){
 				//      		num = num - 2;
@@ -353,9 +373,9 @@ var Module = function () {
 			$('.next').on('click', function () {
 				$this.find('.tbody').remove();
 
-				self.creatCalendar();
 				$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
 				$this.find('.tab_active').parent().parent().prev().children().children().removeClass('tab_active');
+				self.creatCalendar();
 
 				// if(num < 2 ){
 				//      		num = num + 2;

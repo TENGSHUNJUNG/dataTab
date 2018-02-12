@@ -47,6 +47,10 @@ class Module {
 		self.creatWeek();
 		self.creatMonth();
 		self.creatCalendar();
+        // var nowYear = $(".tab_active").text().slice(0, 4);
+        // var nowMonth = $(".tab_active").text().slice(4, 8);
+        // console.log(nowYear);
+        // console.log(nowMonth);
 	}
 
 
@@ -80,24 +84,42 @@ class Module {
 		let initYearMonth = this.option.initYearMonth ;
 		let $ntb_tab = $this.find('.ntb_tab') ;
 		let html = '';
-		let year = new Date(initYearMonth).getFullYear();
-		let month = new Date(initYearMonth).getMonth()+1;
+		// let year = new Date(initYearMonth).getFullYear();
+		// let month = new Date(initYearMonth).getMonth()+1;
 		let i;
 		for ( i = 0 ; i <= 2 ; i++ ) {
 			let nextMonth = moment().add(i, 'months').format("YYYY MMM");
-			console.log(nextMonth)
 			html += '<li class="tab"><a href="#"><span>'+ nextMonth +'</span></a></li>'
 		}
 		$ntb_tab.append(html);
+		$('.tab:first-child a span').addClass('tab_active');
 	}
 
 
 
 	creatCalendar () {
+
+
+		$.ajax({
+			method: 'GET',
+			url: './json/data1.json',
+			dataType: 'json'
+		}).done(function(dataSort) {
+			dataSort = dataSort.sort(function(a,b){ 
+				return a.date > b.date ? 1 : -1;
+			})
+		});
+
+
 		let initYearMonth = this.option.initYearMonth ;
 		let today = new Date();
-        let year = new Date(initYearMonth).getFullYear();
-        let month = new Date(initYearMonth).getMonth()+1;
+        // let year = new Date(initYearMonth).getFullYear();
+        // let month = new Date(initYearMonth).getMonth()+1;
+
+        let year = parseInt($(".tab_active").text().slice(0, 4));
+        let month = parseInt($(".tab_active").text().slice(4, 8));
+        console.log(year)
+        console.log(month)
 
         let day = today.getDate();
 
@@ -112,7 +134,6 @@ class Module {
         let i;        //日期
         let html = '';
 
-        $('.tab:first-child a span').addClass('tab_active');
 
         html += '<tbody class="tbody">';
         html += '<tr class="days">';
@@ -169,9 +190,11 @@ class Module {
 
 
 		$tab.on('click',function(){
+			$this.find('.tbody').remove();
 			num = $(this).index();
 			$('.tab span').removeClass('tab_active');
 			$(this).children().children().addClass('tab_active');
+			self.creatCalendar();
 		// self.creatCalendar();
 		});
 
@@ -180,10 +203,12 @@ class Module {
 
 		//左邊箭頭
 		$('.prev').on('click',function(){
-			// $('.tab span').removeClass('tab_active');
+			$this.find('.tbody').remove();
+			
 			$this.find('.tab_active').parent().parent().prev().children().children().addClass('tab_active');
 			$this.find('.tab_active').parent().parent().next().children().children().removeClass('tab_active');
-			// $(this).children().children().addClass('tab_active');
+			self.creatCalendar();
+			
 
 
 
@@ -200,10 +225,10 @@ class Module {
 		$('.next').on('click',function(){
 			$this.find('.tbody').remove();
 			
-			self.creatCalendar();
+			
 			$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
 			$this.find('.tab_active').parent().parent().prev().children().children().removeClass('tab_active');
-
+			self.creatCalendar();
 
 
 
