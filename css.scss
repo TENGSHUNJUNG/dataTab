@@ -104,8 +104,18 @@ $classname: 'dateTab';
 		height: 85px;
 		border: 1px solid #f4f4f4;
 		cursor: pointer;
+		padding: 0 3px;
+		line-height: 16px;
 		&:hover{
 			background-color: #fff9e3;
+		}
+		span{
+			font-size: 12px;
+			display: inline-block;
+			width: 100%;
+		}
+		.day_div{
+			padding: 7px;
 		}
 		.price{
 			color:red;

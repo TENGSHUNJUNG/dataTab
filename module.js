@@ -223,27 +223,35 @@ var Module = function () {
 				method: 'GET',
 				url: './json/data1.json',
 				dataType: 'json'
-			}).done(function (dataSort) {
-				dataSort = dataSort.sort(function (a, b) {
-					return a.date > b.date ? 1 : -1;
-				});
+			}).done(function (dataSource) {
 
 				//資料日期重複篩選 楷翔提供!!!
 				var lookup = {};
-				var items = dataSort;
-				var dataSort = [];
+				var items = dataSource;
+				var dataSource = [];
 
 				for (var item, i = 0; item = items[i++];) {
 					var date = item.date;
 
 					if (!(date in lookup)) {
 						lookup[date] = 1;
-						dataSort.push(item);
+						dataSource.push(item);
 					}
 				}
-
-				self.creatCalendar(dataSort);
+				//資料日期排序 由小到大
+				dataSource = dataSource.sort(function (a, b) {
+					return a.date > b.date ? 1 : -1;
+				});
+				self.creatCalendar(dataSource);
 			});
+
+			//先做切換列表 整理資料等切換列表做完做
+			//切換列表 複製一份TABLE過去 換成ul li
+			//            	var temp = dataSource[i].status;
+			//            	delete(dataSource[i].status)
+
+			//            	j.nick=temp;
+			// console.log(j)
 		}
 	}, {
 		key: 'creatWeek',
@@ -261,7 +269,7 @@ var Module = function () {
 			var html = '';
 			var i = void 0;
 			for (i = 0; i <= 2; i++) {
-				var nextMonth = moment().add(i, 'months').format("YYYY MMM");
+				var nextMonth = moment(initYearMonth).add(i, 'months').format("YYYY MMM");
 				html += '<li class="tab"><a href="#"><span>' + nextMonth + '</span></a></li>';
 			}
 			$ntb_tab.append(html);
@@ -269,18 +277,20 @@ var Module = function () {
 		}
 	}, {
 		key: 'creatCalendar',
-		value: function creatCalendar(dataSort) {
+		value: function creatCalendar(dataSource) {
 			var _this = this;
 
 			var self = this;
+			var $this = this.$ele;
+			var options = this.option;
 			var initYearMonth = this.option.initYearMonth;
 			var today = new Date();
 
 			//抓取active選擇到的年、月份
 			var year = parseInt($(".tab_active").text().slice(0, 4));
 			var month = parseInt($(".tab_active").text().slice(4, 8));
-			console.log(year);
-			console.log(month);
+			// console.log(year)
+			// console.log(month)
 
 			var day = today.getDate();
 
@@ -336,23 +346,45 @@ var Module = function () {
 			}
 			$('.calendars_tableWrap').append(html + '</tbody></table></div>');
 
-			var dataOfDate = dataSort.length;
-			// 資料日期篩選
+			var dataOfDate = dataSource.length;
 
 			var _loop = function _loop() {
 				var self = _this;
 				var $this = _this.$ele;
 				var $day = $this.find('.day');
-				var dataYear = dataSort[i].date.substring(0, 4);
-				var dataMonth = dataSort[i].date.substring(5, 7);
-				var dataDay = dataSort[i].date.substring(8, 10);
+				var dataYear = dataSource[i].date.substring(0, 4);
+				var dataMonth = dataSource[i].date.substring(5, 7);
+				var dataDay = dataSource[i].date.substring(8, 10);
 				var data_date = parseInt(dataYear + dataMonth + dataDay);
 
-				console.log(data_date);
+				// console.log(data_date);
 
+				//不同資料 都要可以work 尚未完成!!!!!
 				if ($day.hasClass(data_date)) {
-					var price = "<span class='price'>" + '$' + dataSort[i].price + '</span>' + '起';
-					$('.' + data_date + '').append(price);
+
+					var status = "<span class='status'>" + dataSource[i].status + '</span>';
+					var available = "<span class='availableVancancy'>" + '可賣：' + dataSource[i].availableVancancy + '</span>';
+					var total = "<span class='totalVacnacy'>" + '團位：' + dataSource[i].totalVacnacy + '</span>';
+					var price = "<span class='price'>" + '$' + dataSource[i].price + '起' + '</span>';
+
+					$('.' + data_date + '').append(status + available + total + price);
+
+					//不同狀態 產生不同顏色
+					if (dataSource[i].status === '報名') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#24a07c');
+					} else if (dataSource[i].status === '預定') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#24a07c');
+					} else if (dataSource[i].status === '額滿') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#ff7800');
+					} else if (dataSource[i].status === '截止') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#ff7800');
+					} else if (dataSource[i].status === '後補') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#24a07c');
+					} else if (dataSource[i].status === '關團') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#ff7800');
+					};
+
+					//點擊含有資料的td
 					$day.on('click', function () {
 						if ($(this).children().hasClass('price')) {
 							$day.removeClass('hasDataActive');
@@ -396,7 +428,10 @@ var Module = function () {
 			//右邊箭頭
 			$('.next').on('click', function () {
 				$this.find('.tbody').remove();
+				// $this.find('.tab').remove();
 
+
+				// self.creatMonth();
 				$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
 				$this.find('.tab_active').parent().parent().prev().children().children().removeClass('tab_active');
 				self.ajaxGetJson();
