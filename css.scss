@@ -107,6 +107,9 @@ $classname: 'dateTab';
 		&:hover{
 			background-color: #fff9e3;
 		}
+		.price{
+			color:red;
+		}
 		.num{
 			position: absolute;
 			top: 2px;
@@ -119,6 +122,10 @@ $classname: 'dateTab';
 		border:none;
 		cursor: default;
 		pointer-events:none;
+	}
+	.hasDataActive{
+		background-color: #fff9e3;
+		border:2px solid #66bb3c;
 	}
 
 	@media screen and (min-width: $screen-phone) { // 手機 320px

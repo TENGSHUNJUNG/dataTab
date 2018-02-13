@@ -43,13 +43,24 @@ class Module {
 			dataSort = dataSort.sort(function(a,b){ 
 				return a.date > b.date ? 1 : -1;
 			})
-		// self.creatWeek();
-		// self.creatMonth();
-		self.creatCalendar(dataSort);
 
+			//資料日期重複篩選 楷翔提供!!!
+			var lookup = {};
+			var items = dataSort;
+			var dataSort = [];
+		
+			for (var item, i = 0; item = items[i++];) {
+			  let date = item.date;
+
+			  if (!(date in lookup)) {
+			    lookup[date] = 1;
+			    dataSort.push(item);
+			  }
+			}
+
+		self.creatCalendar(dataSort);
 		});
 
-		// self.creatCalendar();
 	}
 
 
@@ -93,8 +104,9 @@ class Module {
 
 
 
-	creatCalendar (dataSort) {
 
+	creatCalendar (dataSort) {
+		let self = this;
 		let initYearMonth = this.option.initYearMonth ;
 		let today = new Date();
 
@@ -159,11 +171,14 @@ class Module {
     	$('.calendars_tableWrap').append(html + '</tbody></table></div>');
 
 
+
     	let dataOfDate = dataSort.length;
+            // 資料日期篩選
 
             for (i=0; i<dataOfDate; i++){
                 let self = this;
                 let $this = this.$ele;
+                let $day = $this.find('.day');
                 let dataYear = dataSort[i].date.substring(0,4);
                 let dataMonth = dataSort[i].date.substring(5,7);
                 let dataDay = dataSort[i].date.substring(8,10);
@@ -171,13 +186,23 @@ class Module {
 
                 console.log(data_date);
 
-                //price的class還沒設定 明天接著做完!!!!!!!!
-                if($('.day').hasClass(data_date)){
-                	let price = "<span class='price'>"+"$"+dataSort[i].price+"起"+"</span>";
+
+
+
+
+                
+                if($day.hasClass(data_date)){
+                	let price = "<span class='price'>" + '$' + dataSort[i].price + '</span>' + '起';
                 	$('.'+data_date+'').append(price);
+                	$day.on('click',function(){
+                		if($(this).children().hasClass('price')){
+	                		$day.removeClass('hasDataActive');
+	                		$(this).addClass('hasDataActive');
+                	}
+                	});
                 }
 
-            }
+            }//for迴圈
 
 
 	}
@@ -220,7 +245,6 @@ class Module {
 		//右邊箭頭
 		$('.next').on('click',function(){
 			$this.find('.tbody').remove();
-			
 			
 			$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
 			$this.find('.tab_active').parent().parent().prev().children().children().removeClass('tab_active');

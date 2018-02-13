@@ -227,12 +227,23 @@ var Module = function () {
 				dataSort = dataSort.sort(function (a, b) {
 					return a.date > b.date ? 1 : -1;
 				});
-				// self.creatWeek();
-				// self.creatMonth();
+
+				//資料日期重複篩選 楷翔提供!!!
+				var lookup = {};
+				var items = dataSort;
+				var dataSort = [];
+
+				for (var item, i = 0; item = items[i++];) {
+					var date = item.date;
+
+					if (!(date in lookup)) {
+						lookup[date] = 1;
+						dataSort.push(item);
+					}
+				}
+
 				self.creatCalendar(dataSort);
 			});
-
-			// self.creatCalendar();
 		}
 	}, {
 		key: 'creatWeek',
@@ -259,7 +270,9 @@ var Module = function () {
 	}, {
 		key: 'creatCalendar',
 		value: function creatCalendar(dataSort) {
+			var _this = this;
 
+			var self = this;
 			var initYearMonth = this.option.initYearMonth;
 			var today = new Date();
 
@@ -324,10 +337,12 @@ var Module = function () {
 			$('.calendars_tableWrap').append(html + '</tbody></table></div>');
 
 			var dataOfDate = dataSort.length;
+			// 資料日期篩選
 
-			for (i = 0; i < dataOfDate; i++) {
-				var self = this;
-				var $this = this.$ele;
+			var _loop = function _loop() {
+				var self = _this;
+				var $this = _this.$ele;
+				var $day = $this.find('.day');
 				var dataYear = dataSort[i].date.substring(0, 4);
 				var dataMonth = dataSort[i].date.substring(5, 7);
 				var dataDay = dataSort[i].date.substring(8, 10);
@@ -335,12 +350,22 @@ var Module = function () {
 
 				console.log(data_date);
 
-				//price的class還沒設定 明天接著做完!!!!!!!!
-				if ($('.day').hasClass(data_date)) {
-					var price = "<span class='price'>" + "$" + dataSort[i].price + "起" + "</span>";
+				if ($day.hasClass(data_date)) {
+					var price = "<span class='price'>" + '$' + dataSort[i].price + '</span>' + '起';
 					$('.' + data_date + '').append(price);
+					$day.on('click', function () {
+						if ($(this).children().hasClass('price')) {
+							$day.removeClass('hasDataActive');
+							$(this).addClass('hasDataActive');
+						}
+					});
 				}
-			}
+			};
+
+			for (i = 0; i < dataOfDate; i++) {
+				_loop();
+			} //for迴圈
+
 		}
 	}, {
 		key: 'onClickMonth',
