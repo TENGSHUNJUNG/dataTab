@@ -127,6 +127,9 @@ $classname: 'dateTab';
 			color: #444;
 		}
 	}
+	.list_day{
+		@extend .day;
+	}
 	.disabled{
 		background-color: #f8f8f8;
 		border:none;

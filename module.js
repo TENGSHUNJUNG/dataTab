@@ -207,6 +207,7 @@ var Module = function () {
 			var self = this;
 			var $this = this.$ele;
 			var options = this.option;
+			$('.dateTab').append('<div class="changList col-md-12"></div>');
 
 			self.creatWeek();
 			self.creatMonth();
@@ -242,7 +243,8 @@ var Module = function () {
 				dataSource = dataSource.sort(function (a, b) {
 					return a.date > b.date ? 1 : -1;
 				});
-				self.creatCalendar(dataSource);
+				// self.creatCalendar(dataSource);
+				self.creatCalendarList(dataSource);
 			});
 
 			//先做切換列表 整理資料等切換列表做完做
@@ -256,8 +258,11 @@ var Module = function () {
 	}, {
 		key: 'creatWeek',
 		value: function creatWeek() {
+			var self = this;
+			var $this = this.$ele;
+			var options = this.option;
 			$('.calendar').append('<div class="calendars_tabWrap">');
-			$('.calendars_tabWrap').append('<a href="#" class="prev on"></a>' + '<ul class="ntb_tab"></ul>' + '<a href="#" class="next on"></a></div>' + '<table class="calendars_tableWrap">' + '<thead>' + '<tr class="calendars_weeksWrap">' + '<th>星期日</th>' + '<th>星期一</th>' + '<th>星期二</th>' + '<th>星期三</th>' + '<th>星期四</th>' + '<th>星期五</th>' + '<th>星期六</th>' + '</tr>' + '</thead>');
+			$this.find('.calendars_tabWrap').append('<a href="#" class="prev on"></a>' + '<ul class="ntb_tab"></ul>' + '<a href="#" class="next on"></a></div>' + '<table class="calendars_tableWrap">' + '<thead>' + '<tr class="calendars_weeksWrap">' + '<th>星期日</th>' + '<th>星期一</th>' + '<th>星期二</th>' + '<th>星期三</th>' + '<th>星期四</th>' + '<th>星期五</th>' + '<th>星期六</th>' + '</tr>' + '</thead>');
 		}
 	}, {
 		key: 'creatMonth',
@@ -273,7 +278,7 @@ var Module = function () {
 				html += '<li class="tab"><a href="#"><span>' + nextMonth + '</span></a></li>';
 			}
 			$ntb_tab.append(html);
-			$('.tab:first-child a span').addClass('tab_active');
+			$this.find('.tab' + ':first-child a span').addClass('tab_active');
 		}
 	}, {
 		key: 'creatCalendar',
@@ -344,7 +349,7 @@ var Module = function () {
 					html += '</tr><tr class="days">';
 				}
 			}
-			$('.calendars_tableWrap').append(html + '</tbody></table></div>');
+			$this.find('.calendars_tableWrap').append(html + '</tbody></table></div>');
 
 			var dataOfDate = dataSource.length;
 
@@ -398,6 +403,130 @@ var Module = function () {
 				_loop();
 			} //for迴圈
 
+		}
+	}, {
+		key: 'creatCalendarList',
+		value: function creatCalendarList(dataSource) {
+			var _this2 = this;
+
+			var self = this;
+			var $this = this.$ele;
+			var options = this.option;
+			var initYearMonth = this.option.initYearMonth;
+			var today = new Date();
+
+			//抓取active選擇到的年、月份
+			var year = parseInt($(".tab_active").text().slice(0, 4));
+			var month = parseInt($(".tab_active").text().slice(4, 8));
+			// console.log(year)
+			// console.log(month)
+
+			var day = today.getDate();
+
+			//本月的第一天是星期幾(距星期日的天數)
+			// let startDay = new Date(year, month - 1, 1).getDay();
+			// let nextStartDay = startDay - 1 ;
+
+
+			//本月有多少天 可以用上個月的0 來表示這個月的最後一天
+			var nDays = new Date(year, month, 0).getDate();
+
+			var numRow = 0; //到達7的時候創建tr
+			var i = void 0; //日期
+			var html = '';
+
+			html += '<div class="calendarList">';
+			html += '<ul class="calendars_daysWrap">';
+
+			//    //月曆開頭
+			//    for (i = 0; i < startDay; i++) {
+			//     html += '<td class="day disabled"></td>';
+			//     numRow++;
+			// }
+
+			//本月日期
+			for (var j = 1; j <= nDays; j++) {
+				if (month < 10 && j < 10) {
+					html += '<li class="list_day hideData ' + year + '0' + month + '0' + j + '"><div class="list_day_div"></div></li>';
+				} else if (month < 10) {
+					html += '<li class="list_day hideData ' + year + '0' + month + j + '"><div class="list_day_div"></div></li>';
+				} else if (j < 10) {
+					html += '<li class="list_day hideData ' + year + month + '0' + j + '"><div class="list_day_div"></div></li>';
+				} else {
+					html += '<li class="list_day hideData ' + year + month + j + '"><div class="list_day_div"></div></li>';
+				}
+				numRow++;
+				// if (numRow == 7) {  //如果已經到一行（一週）了，建造新的tr
+				//     numRow = 0;
+				//     html += '</tr><tr class="days">';
+				// 	}
+			}
+
+			//本月結尾
+			//    let lastDay = startDay + nDays ;
+			//    for (i = lastDay; i < 42; i++) {
+			//     html += '<td class="day disabled"></td>';
+			//     numRow++;
+			//    if (numRow == 7) {  //如果已經到一行（一週）了，建造新的tr
+			//        numRow = 0;
+			//        html += '</tr><tr class="days">';
+			//        }
+			// }
+			$('.calendars_tableWrap').append(html + '</ul></div></table></div>');
+
+			var dataOfDate = dataSource.length;
+
+			var _loop2 = function _loop2() {
+				var self = _this2;
+				var $this = _this2.$ele;
+				var $day = $this.find('.day');
+				var dataYear = dataSource[i].date.substring(0, 4);
+				var dataMonth = dataSource[i].date.substring(5, 7);
+				var dataDay = dataSource[i].date.substring(8, 10);
+				var data_date = parseInt(dataYear + dataMonth + dataDay);
+
+				// console.log(data_date);
+
+
+				if ($('.list_day').hasClass(data_date)) {
+
+					var status = "<span class='status'>" + dataSource[i].status + '</span>';
+					var available = "<span class='availableVancancy'>" + '可賣：' + dataSource[i].availableVancancy + '</span>';
+					var total = "<span class='totalVacnacy'>" + '團位：' + dataSource[i].totalVacnacy + '</span>';
+					var price = "<span class='price'>" + '$' + dataSource[i].price + '起' + '</span>';
+					$('.' + data_date + '').append(status + available + total + price);
+
+					$('.' + data_date + '').addClass('hasData').removeClass('hideData');
+
+					//不同狀態 產生不同顏色
+					if (dataSource[i].status === '報名') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#24a07c');
+					} else if (dataSource[i].status === '預定') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#24a07c');
+					} else if (dataSource[i].status === '額滿') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#ff7800');
+					} else if (dataSource[i].status === '截止') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#ff7800');
+					} else if (dataSource[i].status === '後補') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#24a07c');
+					} else if (dataSource[i].status === '關團') {
+						$('.' + data_date + '>' + 'span:nth-child(2)').css('color', '#ff7800');
+					};
+
+					//點擊含有資料的td
+					$day.on('click', function () {
+						if ($(this).children().hasClass('price')) {
+							$day.removeClass('hasDataActive');
+							$(this).addClass('hasDataActive');
+						}
+					});
+				} //if
+			};
+
+			for (i = 0; i < dataOfDate; i++) {
+				_loop2();
+			} //for迴圈
+			$('.hideData').remove();
 		}
 	}, {
 		key: 'onClickMonth',
