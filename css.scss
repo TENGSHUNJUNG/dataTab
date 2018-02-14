@@ -127,8 +127,58 @@ $classname: 'dateTab';
 			color: #444;
 		}
 	}
+	.calendarList{
+		display: none;
+	}
 	.list_day{
-		@extend .day;
+		width: 100%;
+		height: 62px;
+		border: 1px solid #f4f4f4;
+		cursor: pointer;
+		display: flex;
+		&:hover{
+			background-color: #fff9e3;
+			border:1px solid #66bb3c;
+		}
+		.secDiv_wrap{
+			width: 70%;
+			padding: 5px;
+			.secDiv{
+				color: #666;
+				padding-bottom: 5px;
+			}
+			.list_guaranteed{
+				padding: 3px;
+				color: #fff;
+				background-color: #66bb3c;
+				&:before{
+					content: "\E6DB";
+					text-align: center;
+				}
+			}
+		}
+		.thirdDiv{
+			padding: 5px;
+			width: 20%;
+			font-size: 16px;
+			text-align: right;
+			.list_status{
+				display: block;
+
+			}
+			.list_price{
+				display: block;
+				color: #e10500;
+			}
+		}
+		//星期幾的DIV 尚未完成↓
+		.list_day_div{
+			text-align: center;
+			padding: 0 5px 5px;
+			font-size: 24px;
+			color: #666;
+			width: 10%;
+		}
 	}
 	.disabled{
 		background-color: #f8f8f8;
@@ -139,6 +189,10 @@ $classname: 'dateTab';
 	.hasDataActive{
 		background-color: #fff9e3;
 		border:2px solid #66bb3c;
+	}
+	.list_hasDataActive{
+		@extend .hasDataActive;
+		border:1px solid #66bb3c;
 	}
 
 	@media screen and (min-width: $screen-phone) { // 手機 320px
