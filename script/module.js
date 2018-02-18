@@ -81,13 +81,6 @@ class Module {
               item.guaranteed = guaranteedKey ;
 
 
-
-              //資料等於0的話 會顯示undefind 需要下判斷
-              if(dataSource[i].availableVancancy || dataSource[i].onsell || dataSource[i].totalVacnacy || dataSource[i].total === 0){
-
-              }
-
-
 			  if (!(date in lookup)) {
 			    lookup[date] = 1;
 			    dataSource.push(item);
@@ -112,6 +105,7 @@ class Module {
 		let options = this.option;
 		
 		$this.find('.calendars_tabWrap').append(
+										'<div class="calendars_wrap">'+
 										'<table class="calendars_tableWrap">'+
 											'<thead>'+
 												'<tr class="calendars_weeksWrap">'+
@@ -122,7 +116,8 @@ class Module {
 													'<th>星期四</th>'+
 													'<th>星期五</th>'+
 													'<th>星期六</th>'+
-												'</tr>'+'</thead>');
+												'</tr>'+'</thead>'+
+												'<tbody id="tbody" class="tbody">');
 	}
 
 
@@ -141,6 +136,8 @@ class Module {
 		}
 		$ntb_tab.append(html);
 		$this.find(('.tab') + ':first-child a span').addClass('tab_active');
+
+		self.creatWeek();
 	}
 
 
@@ -171,9 +168,8 @@ class Module {
         let numRow = 0;  //到達7的時候創建tr
         let i;        //日期
         let html = '';
-        self.creatWeek();
+        
 
-        html += '<tbody class="tbody">';
         html += '<tr class="days">';
 
 
@@ -211,7 +207,11 @@ class Module {
             html += '</tr><tr class="days">';
             }
     	}
-    	$this.find('.calendars_tableWrap').append(html + '</tbody></table></div>');
+
+    	
+    	
+    	document.getElementById("tbody").innerHTML = html;
+		$this.find('.calendars_tableWrap').append('</tbody></table></div>');
 
 
 
@@ -228,9 +228,26 @@ class Module {
 
                 // console.log(data_date);
 
-                //不同資料 都要可以work 尚未完成!!!!!
+               
                 if($day.hasClass(data_date)){
 
+                	//資料內值為0  顯示0 列表版可以不用再寫一次
+	              if( dataSource[i].guaranteed === undefined && dataSource[i].totalVacnacy === undefined ){
+	              		dataSource[i].totalVacnacy = 0  ;
+	              		dataSource[i].guaranteed = false ;
+	              }else if( dataSource[i].guaranteed === undefined && dataSource[i].availableVancancy === undefined ){
+	              		dataSource[i].availableVancancy = 0  ;
+	              		dataSource[i].guaranteed = false ;
+	              }else if(dataSource[i].availableVancancy === undefined ){
+	              		dataSource[i].availableVancancy = 0  ;
+	              }else if(dataSource[i].totalVacnacy === undefined ){
+	              		dataSource[i].totalVacnacy = 0  ;
+	              }else if(dataSource[i].guaranteed === undefined ){
+	              		dataSource[i].guaranteed = false ;
+	              };
+
+
+	              	let guaranteed = "<span class='guaranteed'>" + dataSource[i].guaranteed + '</span>'
                 	let status = "<span class='status'>" + dataSource[i].status + '</span>';
                 	let available = "<span class='availableVancancy'>" + '可賣：' + dataSource[i].availableVancancy  + '</span>';
                 	let total = "<span class='totalVacnacy'>" + '團位：' + dataSource[i].totalVacnacy  + '</span>';
@@ -239,6 +256,7 @@ class Module {
 
 
 
+                	$('.'+data_date+'').children().append( guaranteed );
                 	$('.'+data_date+'').append(status + available + total + price);
 
                 	//不同狀態 產生不同顏色
@@ -287,9 +305,7 @@ class Module {
         let i;        //日期
         let html = '';
 
-
-        html += '<div class="calendarList">';
-        html += '<ul class="calendars_daysWrap">';
+        $this.find('.calendars_wrap').append('<div id="calendars_wrap" class="calendarList"><ul class="calendars_daysWrap">');
 
 
     	//本月日期
@@ -312,8 +328,8 @@ class Module {
         }
 
 
-    	$('.calendars_tabWrap').append(html + '</ul></div></div>');
-
+    	$('.calendars_wrap').append('</ul></div></div>');
+    	document.getElementById("calendars_wrap").innerHTML = html;
 
 
     	let dataOfDate = dataSource.length;
@@ -382,8 +398,6 @@ class Module {
 
 
 		$tab.on('click',function(){
-			$this.find('.calendars_tableWrap').remove();
-			$this.find('.calendarList').remove();
 			$('.tab span').removeClass('tab_active');
 			$(this).children().children().addClass('tab_active');
 			self.ajaxGetJson();
@@ -394,8 +408,6 @@ class Module {
 
 		//左邊箭頭
 		$('.prev').on('click',function(){
-			$this.find('.calendars_tableWrap').remove();
-			$this.find('.calendarList').remove();
 
 			$this.find('.tab_active').parent().parent().prev().children().children().addClass('tab_active');
 			$this.find('.tab_active').parent().parent().next().children().children().removeClass('tab_active');
@@ -409,9 +421,6 @@ class Module {
 
 		//右邊箭頭
 		$('.next').on('click',function(){
-
-			$this.find('.calendars_tableWrap').remove();
-			$this.find('.calendarList').remove();
 			
 			
 			$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
