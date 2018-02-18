@@ -124,8 +124,8 @@ $classname: 'dateTab';
 			}
 			.guaranteed{
 				position: absolute;
-				top:2px;
-				right:4px;
+				top:0px;
+				right:0px;
 				text-align: center;
 				width: 36px;
 				background-color: #66bb3c;
@@ -180,13 +180,17 @@ $classname: 'dateTab';
 				color: #e10500;
 			}
 		}
-		//星期幾的DIV 尚未完成↓
 		.list_day_div{
-			text-align: center;
+			display: flex;
+			flex-wrap:wrap;
+			justify-content:center;
 			padding: 0 5px 5px;
 			font-size: 24px;
 			color: #666;
 			width: 10%;
+			.list_week{
+				font-size: 16px;
+			}
 		}
 	}
 	.disabled{
