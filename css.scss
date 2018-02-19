@@ -30,7 +30,6 @@ $classname: 'dateTab';
 		position: relative;
 		width: 100%;
 		float: left;
-		border: 1px solid #f4f4f4;
 		overflow: hidden;
 			.prev{
 				width: 20px;
@@ -89,6 +88,7 @@ $classname: 'dateTab';
 		color: red!important;
 	}
 	.calendars_tableWrap{
+		border: 1px solid #f4f4f4;
 		width: 100%;
 		table-layout:fixed;
 		.calendars_weeksWrap{
@@ -116,15 +116,24 @@ $classname: 'dateTab';
 		}
 		.day_div{
 			padding: 7px;
+			.num{
+				position: absolute;
+				top: 2px;
+				left: 2px;
+				color: #444;
+			}
+			.guaranteed{
+				position: absolute;
+				top:0px;
+				right:0px;
+				text-align: center;
+				width: 36px;
+				background-color: #66bb3c;
+				color: #fff;
+			}
 		}
 		.price{
 			color:red;
-		}
-		.num{
-			position: absolute;
-			top: 2px;
-			left: 2px;
-			color: #444;
 		}
 	}
 	.calendarList{
@@ -171,13 +180,17 @@ $classname: 'dateTab';
 				color: #e10500;
 			}
 		}
-		//星期幾的DIV 尚未完成↓
 		.list_day_div{
-			text-align: center;
+			display: flex;
+			flex-wrap:wrap;
+			justify-content:center;
 			padding: 0 5px 5px;
 			font-size: 24px;
 			color: #666;
 			width: 10%;
+			.list_week{
+				font-size: 16px;
+			}
 		}
 	}
 	.disabled{
@@ -193,6 +206,13 @@ $classname: 'dateTab';
 	.list_hasDataActive{
 		@extend .hasDataActive;
 		border:1px solid #66bb3c;
+	}
+	.listPage_wrap{
+		display: none;
+		.listPage_box{
+			display: flex;
+			justify-content: space-between;
+		}
 	}
 
 	@media screen and (min-width: $screen-phone) { // 手機 320px
