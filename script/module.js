@@ -17,15 +17,15 @@ class Module {
 		let self = this ;
 		let $this = this.$ele;
 		let options = this.option;
-		$('.dateTab').append('<div class="changList col-md-12"><a href="#">'+
+		$('.dateTab').append('<div class="changList col-md-12"><a href="javascript:;">'+
 								'<p>切換列表顯示</p>'+
 								'<p style="display:none;">切換月曆顯示</p>'+
 								'</a></div>');
 
 		$('.calendar').append('<div class="calendars_tabWrap">'+
-								'<a href="#" class="prev"></a>'+
+								'<a href="javascript:;" class="prev"></a>'+
 								'<ul class="ntb_tab"></ul>'+
-								'<a href="#" class="next"></a>'+
+								'<a href="javascript:;" class="next"></a>'+
 							  '</div>');
 		self.creatMonth();	
 		self.ajaxGetJson();
@@ -117,6 +117,17 @@ class Module {
 													'<th>星期六</th>'+
 												'</tr>'+'</thead>'+
 												'<tbody id="tbody" class="tbody">');
+    	$this.find('.calendars_wrap').append('<div class="calendars_list_wrap">'+
+    												'<ul id="calendarList" class="calendarList" style="min-height: 496px;"></ul>'+
+														'</div></tbody></table>'+
+														'<div class="listPage_wrap">'+
+    														'<div class="listPage_box">'+
+    														'<div class="list_prev"><a href="javascript:;">«上一頁</a></div>'+
+    														'<div class="current_page"></div>'+
+    														'<div class="list_next"><a href="javascript:;">下一頁»</a></div>'+
+    														'</div>'+
+    													'</div>'+
+    												'</div>');
 	}
 
 
@@ -216,7 +227,7 @@ class Module {
     	
     	
     	document.getElementById("tbody").innerHTML = html;
-		$this.find('.calendars_tableWrap').append('</tbody></table></div>');
+		// $this.find('.calendars_tableWrap').append('</tbody></table></div>');
 
 
 
@@ -310,7 +321,6 @@ class Module {
         let i;        //日期
         let html = '';
 
-        $this.find('.calendars_wrap').append('<div id="calendars_wrap" class="calendarList"><ul class="calendars_daysWrap">');
 
     	
     	for (let j = 1; j <= nDays; j++) {
@@ -332,10 +342,9 @@ class Module {
 
         }
 
+    	
+    	document.getElementById("calendarList").innerHTML = html;
 
-
-    	$('.calendars_wrap').append('</ul></div></div>');
-    	document.getElementById("calendars_wrap").innerHTML = html;
 
 
     	let dataOfDate = dataSource.length;
@@ -398,9 +407,66 @@ class Module {
 
             }//for迴圈
             $('.hideData').remove();
+            self.creatPagination();
 	}
 
 
+
+
+	//	資料只有一頁的話 按下一頁還是會增加
+	creatPagination () {
+		var pageSize=8;      //每頁顯示數據條數
+		var currentPage=1;   //當前頁數
+		var totalSize=$(".calendarList .list_day").length; //獲取總數據
+		console.log(totalSize)
+		var totalPage=Math.ceil(totalSize/pageSize); //計算總頁數 ceil無條件進位
+		$(".calendarList .list_day:gt(7)").hide(); //設置首頁顯示8條數據
+		$(".total").text(totalPage);  //設置總頁數
+		$(".current_page").text(currentPage+'/'+totalPage); //設置當前頁數
+
+
+		//實現下一頁
+		$(".list_next").click(function(){
+			if(currentPage == totalPage){ //當前頁數==最後一頁，禁止下一頁
+				console.log('進if')
+				   return false;
+				}else{//不是最後一頁，顯示應該顯示的數據.
+					console.log('進else')
+				    $(".current_page").text(++currentPage+'/'+totalPage);  //當前頁數先+1
+					var start=pageSize*(currentPage-1);
+					var end=pageSize*currentPage;
+					$.each($('.calendarList .list_day'),function(index,item){
+							if(index >=start && index < end){
+								$(this).show();
+								}
+								else{
+									$(this).hide();
+									}
+						});
+					
+					}
+			});
+			
+			//實現上一頁
+		$(".list_prev").click(function(){
+			if(currentPage == 1){//當前頁數==1，禁止上一頁
+			     return false;
+				}else{
+					 $(".current_page").text(--currentPage+'/'+totalPage);  //當前頁數先-1
+					 var start=pageSize*(currentPage-1);
+					 var end=pageSize*currentPage;
+					 $.each($('.calendarList .list_day'),function(index,item){
+						   if(index >=start && index < end){
+								$(this).show();
+								}
+								else{
+									$(this).hide();
+									}
+						 });
+					}
+			
+			});
+	}
 
 
 	onClickMonth () {
@@ -459,6 +525,7 @@ class Module {
 			$('.changList p').toggle(0,"d-no");
 			$this.find('.calendars_tableWrap').toggle(0,'.d-no');
 			$this.find('.calendarList').toggle(0,'.d-no');
+			$this.find('.listPage_wrap').toggle(0,'.d-no');
 		});
 	}
 

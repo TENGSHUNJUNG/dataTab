@@ -30,7 +30,6 @@ $classname: 'dateTab';
 		position: relative;
 		width: 100%;
 		float: left;
-		border: 1px solid #f4f4f4;
 		overflow: hidden;
 			.prev{
 				width: 20px;
@@ -89,6 +88,7 @@ $classname: 'dateTab';
 		color: red!important;
 	}
 	.calendars_tableWrap{
+		border: 1px solid #f4f4f4;
 		width: 100%;
 		table-layout:fixed;
 		.calendars_weeksWrap{
@@ -206,6 +206,13 @@ $classname: 'dateTab';
 	.list_hasDataActive{
 		@extend .hasDataActive;
 		border:1px solid #66bb3c;
+	}
+	.listPage_wrap{
+		display: none;
+		.listPage_box{
+			display: flex;
+			justify-content: space-between;
+		}
 	}
 
 	@media screen and (min-width: $screen-phone) { // 手機 320px
