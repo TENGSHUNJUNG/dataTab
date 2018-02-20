@@ -3,7 +3,6 @@
 <div class="calendar">
 	// 剩下的請用js產出來
 </div>
-
 */
 
 // Plugin usage

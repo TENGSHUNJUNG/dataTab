@@ -391,20 +391,24 @@ var Module = function () {
 
 				if ($day.hasClass(data_date)) {
 
-					//資料內值為0  顯示0 列表版可以不用再寫一次
-					if (dataSource[i].guaranteed === undefined && dataSource[i].totalVacnacy === undefined) {
-						dataSource[i].totalVacnacy = 0;
-						dataSource[i].guaranteed = false;
-					} else if (dataSource[i].guaranteed === undefined && dataSource[i].availableVancancy === undefined) {
+					// 資料內值為0  顯示0 列表版可以不用再寫一次
+					// if( dataSource[i].guaranteed === undefined && dataSource[i].totalVacnacy === undefined ){
+					// 		dataSource[i].totalVacnacy = 0  ;
+					// 		dataSource[i].guaranteed = false ;
+					// }else if( dataSource[i].guaranteed === undefined && dataSource[i].availableVancancy === undefined ){
+					// 		dataSource[i].availableVancancy = 0  ;
+					// 		dataSource[i].guaranteed = false ;
+					// }else if(dataSource[i].availableVancancy === undefined ){
+					// 		dataSource[i].availableVancancy = 0  ;
+					// }else if(dataSource[i].totalVacnacy === undefined ){
+					// 		dataSource[i].totalVacnacy = 0  ;
+					// }else if(dataSource[i].guaranteed === undefined ){
+					// 		dataSource[i].guaranteed = false ;
+					// };
+					//如果可賣數量為0 顯示undefined 強制轉為0
+					if (dataSource[i].availableVancancy === undefined) {
 						dataSource[i].availableVancancy = 0;
-						dataSource[i].guaranteed = false;
-					} else if (dataSource[i].availableVancancy === undefined) {
-						dataSource[i].availableVancancy = 0;
-					} else if (dataSource[i].totalVacnacy === undefined) {
-						dataSource[i].totalVacnacy = 0;
-					} else if (dataSource[i].guaranteed === undefined) {
-						dataSource[i].guaranteed = false;
-					};
+					}
 
 					var guaranteed = "<span class='guaranteed'>" + dataSource[i].guaranteed + '</span>';
 					var status = "<span class='status'>" + dataSource[i].status + '</span>';
@@ -414,6 +418,12 @@ var Module = function () {
 
 					$('.' + data_date + '').children().append(guaranteed);
 					$('.' + data_date + '').append(status + available + total + price);
+
+					//如果資料內其中一筆 是undefined 就刪除所有資料 除了可賣數量可以為0
+					if (dataSource[i].guaranteed === undefined || dataSource[i].date === undefined || dataSource[i].price === undefined || dataSource[i].totalVacnacy === undefined || dataSource[i].status === undefined) {
+						$('.' + data_date + '>' + '.day_div' + '>' + 'span:nth-child(2)').remove();
+						$('.' + data_date + '>' + 'span').remove();
+					}
 
 					//不同狀態 產生不同顏色
 					if (dataSource[i].status === '報名' || dataSource[i].status === '預定' || dataSource[i].status === '後補') {
@@ -499,6 +509,11 @@ var Module = function () {
 
 					$('.list_day' + '.' + data_date + '').addClass('hasData').removeClass('hideData');
 
+					//如果資料內其中一筆 是undefined 就刪除所有資料 除了可賣數量可以為0
+					if (dataSource[i].guaranteed === undefined || dataSource[i].date === undefined || dataSource[i].price === undefined || dataSource[i].totalVacnacy === undefined || dataSource[i].status === undefined) {
+						$('.calendarList' + '>' + '.' + data_date + '').remove();
+					}
+
 					//不同狀態 產生不同顏色
 					if (dataSource[i].status === '報名' || dataSource[i].status === '預定' || dataSource[i].status === '後補') {
 						$('.' + data_date + '>' + '.thirdDiv' + '>' + 'span:nth-child(1)').css('color', '#24a07c');
@@ -550,11 +565,9 @@ var Module = function () {
 			$(".list_next").click(function () {
 				if (currentPage == totalPage) {
 					//當前頁數==最後一頁，禁止下一頁
-					console.log('進if');
 					return false;
 				} else {
 					//不是最後一頁，顯示應該顯示的數據.
-					console.log('進else');
 					$(".current_page").text(++currentPage + '/' + totalPage); //當前頁數先+1
 					var start = pageSize * (currentPage - 1);
 					var end = pageSize * currentPage;
