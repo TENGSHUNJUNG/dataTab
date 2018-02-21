@@ -9,14 +9,13 @@ class Module {
 		this.ele = ele;
 		this.$ele = $(ele);
 		this.option = options;
+		this.self = this ;
+		this.$this = this.$ele ;
 	}
 
 
 
 	init () {
-		let self = this ;
-		let $this = this.$ele;
-		let options = this.option;
 		$('.dateTab').append('<div class="changList col-md-12"><a href="javascript:;">'+
 								'<p>切換列表顯示</p>'+
 								'<p style="display:none;">切換月曆顯示</p>'+
@@ -27,10 +26,9 @@ class Module {
 								'<ul class="ntb_tab"></ul>'+
 								'<a href="javascript:;" class="next"></a>'+
 							  '</div>');
-		self.creatMonth();	
-		self.ajaxGetJson();
-		self.onClickMonth();
-		self.switch();
+		this.self.creatMonth();	
+		this.self.ajaxGetJson();
+		this.self.onClickMonth();
 	}
 
 
@@ -49,15 +47,13 @@ class Module {
 			dataType: 'json'
 		}).done(function(dataSource) {
 
-			//資料日期重複篩選 楷翔提供!!!
 			var lookup = {};
 			var items = dataSource;
 			var dataSource = [];
-		
+
 			for (var item, i = 0; item = items[i++];) {
 
 			  var date = item.date ;
-
 
 			  //不同資料的key 刪除再新增
 			  var statusKey = (item.status||item.state) ;
@@ -89,6 +85,7 @@ class Module {
 			dataSource = dataSource.sort(function(a,b){ 
 				return a.date > b.date ? 1 : -1;
 			})
+		self.inputData(dataSource);
 		self.creatCalendar(dataSource);
 		self.creatCalendarList(dataSource);
 		});
@@ -99,11 +96,8 @@ class Module {
 
 
 	creatWeek () {
-		let self = this ;
-		let $this = this.$ele;
-		let options = this.option;
 		
-		$this.find('.calendars_tabWrap').append(
+		this.$this.find('.calendars_tabWrap').append(
 										'<div class="calendars_wrap">'+
 										'<table class="calendars_tableWrap">'+
 											'<thead>'+
@@ -117,7 +111,7 @@ class Module {
 													'<th>星期六</th>'+
 												'</tr>'+'</thead>'+
 												'<tbody id="tbody" class="tbody">');
-    	$this.find('.calendars_wrap').append('<div class="calendars_list_wrap">'+
+    	this.$this.find('.calendars_wrap').append('<div class="calendars_list_wrap">'+
     												'<ul id="calendarList" class="calendarList" style="min-height: 496px;"></ul>'+
 														'</div></tbody></table>'+
 														'<div class="listPage_wrap">'+
@@ -131,23 +125,19 @@ class Module {
 	}
 
 
-
-
 	creatMonth () {
-		let self = this ;
-		let $this = this.$ele ;
 		let initYearMonth = this.option.initYearMonth ;
-		let $ntb_tab = $this.find('.ntb_tab') ;
+		let $ntb_tab = this.$this.find('.ntb_tab') ;
 		let html = '';
 		let i;
-		for ( i = 0 ; i <= 2 ; i++ ) {
+		for ( i = 0 ; i <= 3 ; i++ ) {
 			let nextMonth = moment(initYearMonth).add(i, 'months').format("YYYY MMM");
 			html += '<li class="tab"><a href="#"><span>'+ nextMonth +'</span></a></li>'
 		}
 		$ntb_tab.append(html);
-		$this.find(('.tab') + ':first-child a span').addClass('tab_active');
+		this.$this.find(('.tab') + ':first-child a span').addClass('tab_active');
 
-		self.creatWeek();
+		this.self.creatWeek();
 	}
 
 
@@ -160,10 +150,6 @@ class Module {
 
 
 	creatCalendar (dataSource) {
-		let self = this;
-		let $this = this.$ele;
-		let options = this.option;
-		let initYearMonth = this.option.initYearMonth ;
 		let today = new Date();
 
 		//抓取active選擇到的年、月份
@@ -234,9 +220,7 @@ class Module {
     	let dataOfDate = dataSource.length;
 
             for (i=0; i<dataOfDate; i++){
-                let self = this;
-                let $this = this.$ele;
-                let $day = $this.find('.day');
+                let $day = this.$this.find('.day');
                 let dataYear = dataSource[i].date.substring(0,4);
                 let dataMonth = dataSource[i].date.substring(5,7);
                 let dataDay = dataSource[i].date.substring(8,10);
@@ -247,30 +231,32 @@ class Module {
                
                 if($day.hasClass(data_date)){
 
-                	// 資料內值為0  顯示0 列表版可以不用再寫一次
-	              // if( dataSource[i].guaranteed === undefined && dataSource[i].totalVacnacy === undefined ){
-	              // 		dataSource[i].totalVacnacy = 0  ;
-	              // 		dataSource[i].guaranteed = false ;
-	              // }else if( dataSource[i].guaranteed === undefined && dataSource[i].availableVancancy === undefined ){
-	              // 		dataSource[i].availableVancancy = 0  ;
-	              // 		dataSource[i].guaranteed = false ;
-	              // }else if(dataSource[i].availableVancancy === undefined ){
-	              // 		dataSource[i].availableVancancy = 0  ;
-	              // }else if(dataSource[i].totalVacnacy === undefined ){
-	              // 		dataSource[i].totalVacnacy = 0  ;
-	              // }else if(dataSource[i].guaranteed === undefined ){
-	              // 		dataSource[i].guaranteed = false ;
-	              // };
-	              	//如果可賣數量為0 顯示undefined 強制轉為0
-	              	if( dataSource[i].availableVancancy === undefined ){
-	              		dataSource[i].availableVancancy = 0 ;
-	              	}
+                	// 資料內值為0  顯示0 
+	              if( dataSource[i].guaranteed === undefined && dataSource[i].totalVacnacy === undefined ){
+	              		dataSource[i].totalVacnacy = 0  ;
+	              		dataSource[i].guaranteed = false ;
+	              }else if( dataSource[i].guaranteed === undefined && dataSource[i].availableVancancy === undefined ){
+	              		dataSource[i].availableVancancy = 0  ;
+	              		dataSource[i].guaranteed = false ;
+	              }else if(dataSource[i].availableVancancy === undefined ){
+	              		dataSource[i].availableVancancy = 0  ;
+	              }else if(dataSource[i].totalVacnacy === undefined ){
+	              		dataSource[i].totalVacnacy = 0  ;
+	              }else if(dataSource[i].guaranteed === undefined ){
+	              		dataSource[i].guaranteed = false ;
+	              };
+	              	//如果可賣、團位 數量為0 顯示undefined 強制轉為0
+	              	// if( dataSource[i].availableVancancy === undefined ){
+	              	// 	dataSource[i].availableVancancy = 0 ;
+	              	// }else if( dataSource[i].totalVacnacy === undefined ){
+	              	// 	dataSource[i].totalVacnacy = 0  ;
+	              	// }
 
 	              	let guaranteed = "<span class='guaranteed'>" + dataSource[i].guaranteed + '</span>'
                 	let status = "<span class='status'>" + dataSource[i].status + '</span>';
                 	let available = "<span class='availableVancancy'>" + '可賣：' + dataSource[i].availableVancancy  + '</span>';
                 	let total = "<span class='totalVacnacy'>" + '團位：' + dataSource[i].totalVacnacy  + '</span>';
-                	let price = "<span class='price'>" + '$' + self.addCommas(dataSource[i].price)  + '起' + '</span>';
+                	let price = "<span class='price'>" + '$' + this.self.addCommas(dataSource[i].price)  + '起' + '</span>';
             
 
 
@@ -278,7 +264,7 @@ class Module {
                 	$('.'+data_date+'').append(status + available + total + price);
 
 
-                	//如果資料內其中一筆 是undefined 就刪除所有資料 除了可賣數量可以為0
+                	//如果資料內其中一筆 是undefined 就刪除所有資料
                 	if( dataSource[i].guaranteed === undefined || dataSource[i].date === undefined || dataSource[i].price === undefined || dataSource[i].totalVacnacy === undefined || dataSource[i].status === undefined ){
                 		$('.'+data_date+'>'+'.day_div'+'>'+'span:nth-child(2)').remove();
                 		$('.'+data_date+'>'+'span').remove();
@@ -306,15 +292,10 @@ class Module {
 
             }//for迴圈
 
-
 	}
 
 
 	creatCalendarList (dataSource) {
-		let self = this;
-		let $this = this.$ele;
-		let options = this.option;
-		let initYearMonth = this.option.initYearMonth ;
 		let today = new Date();
 
 		//抓取active選擇到的年、月份
@@ -357,13 +338,10 @@ class Module {
     	document.getElementById("calendarList").innerHTML = html;
 
 
-
     	let dataOfDate = dataSource.length;
 
             for (i=0; i<dataOfDate; i++){
-                let self = this;
-                let $this = this.$ele;
-                let $list_day = $this.find('.list_day');
+                let $list_day = this.$this.find('.list_day');
                 let dataYear = dataSource[i].date.substring(0,4);
                 let dataMonth = dataSource[i].date.substring(5,7);
                 let dataDay = dataSource[i].date.substring(8,10);
@@ -378,10 +356,9 @@ class Module {
                 	let total = "<span class='list_totalVacnacy'>" + '團位：' + dataSource[i].totalVacnacy  + '</span></div>';
                 	let guaranteed = "<div class='secDiv_guaranteed'><span class='ic-ln list_guaranteed'>" + '保證出團：' + dataSource[i].guaranteed  + '</span></div></div>';
                 	let status = "<div class='thirdDiv'><span class='list_status'>" + dataSource[i].status + '</span>';
-                	let price = "<span class='list_price'>" + '$' + self.addCommas(dataSource[i].price)  + '起' + '</span></div>';
+                	let price = "<span class='list_price'>" + '$' + this.self.addCommas(dataSource[i].price)  + '起' + '</span></div>';
                 	$('.list_day'+'.'+data_date+'').append( available + total + guaranteed + status + price);
             		
-
 
                 	$('.list_day'+'.'+data_date+'').addClass('hasData').removeClass('hideData');
 
@@ -389,7 +366,6 @@ class Module {
                 	if( dataSource[i].guaranteed === undefined || dataSource[i].date === undefined || dataSource[i].price === undefined || dataSource[i].totalVacnacy === undefined || dataSource[i].status === undefined ){
                 		$('.calendarList'+'>'+'.'+data_date+'').remove();
                 	}
-                	
 
 
                 	//不同狀態 產生不同顏色
@@ -421,7 +397,7 @@ class Module {
 
             }//for迴圈
             $('.hideData').remove();
-            self.creatPagination();
+            this.self.creatPagination();
 	}
 
 
@@ -432,12 +408,11 @@ class Module {
 		var pageSize=8;      //每頁顯示數據條數
 		var currentPage=1;   //當前頁數
 		var totalSize=$(".calendarList .list_day").length; //獲取總數據
-		console.log(totalSize)
 		var totalPage=Math.ceil(totalSize/pageSize); //計算總頁數 ceil無條件進位
 		$(".calendarList .list_day:gt(7)").hide(); //設置首頁顯示8條數據
 		$(".total").text(totalPage);  //設置總頁數
 		$(".current_page").text(currentPage+'/'+totalPage); //設置當前頁數
-
+		// console.log(totalSize)
 
 		//實現下一頁
 		$(".list_next").click(function(){
@@ -484,11 +459,8 @@ class Module {
 	onClickMonth () {
 		let self = this;
 		let $this = this.$ele;
-		let options = this.option;
-		let initYearMonth = this.option.initYearMonth ;
-		let $tab = $this.find('.tab');
-		let srcollWidth = $this.find('.tab').width();
-
+		let $tab = this.$this.find('.tab');
+		let srcollWidth = this.$this.find('.tab').width();
 
 
 		$tab.on('click',function(){
@@ -502,11 +474,13 @@ class Module {
 
 		//左邊箭頭
 		$('.prev').on('click',function(){
+			$('.ntb_tab li').css({
+				"right":"0%"
+			});
 
 			$this.find('.tab_active').parent().parent().prev().children().children().addClass('tab_active');
 			$this.find('.tab_active').parent().parent().next().children().children().removeClass('tab_active');
 			self.ajaxGetJson();
-			
 		});
 
 
@@ -515,43 +489,54 @@ class Module {
 
 		//右邊箭頭
 		$('.next').on('click',function(){
-			
-			
+			$('.ntb_tab li').css({
+				"right":"33.3%"
+			});
+
 			$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
 			$this.find('.tab_active').parent().parent().prev().children().children().removeClass('tab_active');
 			self.ajaxGetJson();
-
-
 		});
 
 
 
+		//點擊切換列表、月曆
+		$('.changList').on('click',function(){
+			self.switch();
+		});
+		
+
 	}
+
 
 	//切換列表 月曆顯示
 	switch () {
-		let self = this;
-		let $this = this.$ele;
-		let options = this.option;
-		$('.changList').on('click',function(){
-			$('.changList p').toggle(0,"d-no");
-			$this.find('.calendars_tableWrap').toggle(0,'.d-no');
-			$this.find('.calendarList').toggle(0,'.d-no');
-			$this.find('.listPage_wrap').toggle(0,'.d-no');
-		});
+		$('.changList p').toggle(0,"d-no");
+		this.$this.find('.calendars_tableWrap').toggle(0,'.d-no');
+		this.$this.find('.calendarList').toggle(0,'.d-no');
+		this.$this.find('.listPage_wrap').toggle(0,'.d-no');
 	}
 
 
 
 
+
+	// 加資料時如果有相同日期的資料，以後輸入為主，輸入時如果輸入沒有的月份，模組會加上該月份
+	inputData (dataSource) {
+		var dataSource = dataSource.concat();
+		console.log(dataSource);
+		return dataSource;
+	}
+
 	// 重設資料時，月曆、tab重新產出
 	resetData () {
-
+		// this.self.ajaxGetJson();
 	}
 
 	// destroy calendar，destroy時連class new出來的實例物件也要刪除
 	destroy () {
-		
+		$('.calendar').remove();
+		$('.changList').remove();
 	}
 
 };

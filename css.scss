@@ -64,10 +64,10 @@ $classname: 'dateTab';
 		background-color: #ede9dd;
 		width: 100%;
 		display: flex;
-		justify-content:center;
+		justify-content:right;
 		.tab{
 			list-style-type:none;
-			width: 33.3%;
+			min-width: 198px;
 			position: relative;
 			a{
 				text-decoration: none;
@@ -155,6 +155,9 @@ $classname: 'dateTab';
 			.secDiv{
 				color: #666;
 				padding-bottom: 5px;
+				.list_availableVancancy{
+					margin-right:30px;
+				}
 			}
 			.list_guaranteed{
 				padding: 3px;
