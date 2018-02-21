@@ -85,7 +85,6 @@ class Module {
 			dataSource = dataSource.sort(function(a,b){ 
 				return a.date > b.date ? 1 : -1;
 			})
-		self.inputData(dataSource);
 		self.creatCalendar(dataSource);
 		self.creatCalendarList(dataSource);
 		});
@@ -522,15 +521,115 @@ class Module {
 
 
 	// 加資料時如果有相同日期的資料，以後輸入為主，輸入時如果輸入沒有的月份，模組會加上該月份
-	inputData (dataSource) {
-		var dataSource = dataSource.concat();
-		console.log(dataSource);
-		return dataSource;
+	inputData (inputData) {
+		let self = this ;
+		let $this = this.$ele;
+
+		$.ajax({
+			method: 'GET',
+			url: './json/data1.json',
+			dataType: 'json'
+		}).done(function(dataSource) {
+
+			var lookup = {};
+			var items = dataSource;
+			var dataSource = [];
+
+			for (var item, i = 0; item = items[i++];) {
+
+			  var date = item.date ;
+
+			  //不同資料的key 刪除再新增
+			  var statusKey = (item.status||item.state) ;
+              delete(item.status||item.state) ;
+              item.status = statusKey ;	
+              
+
+			  var availableVancancyKey = (item.availableVancancy||item.onsell) ;
+              delete(item.availableVancancy||item.onsell) ;
+              item.availableVancancy = availableVancancyKey ;	
+
+
+              var totalVacnacyKey = (item.totalVacnacy||item.total) ;
+              delete(item.totalVacnacy||item.total) ;
+              item.totalVacnacy = totalVacnacyKey ;
+
+
+              var guaranteedKey = (item.guaranteed || item.certain) ;
+              delete(item.guaranteed || item.certain) ;
+              item.guaranteed = guaranteedKey ;
+
+
+			  if (!(date in lookup)) {
+			    lookup[date] = 1;
+			    dataSource.push(item);
+			  }
+			}
+			//排序之前 合併陣列
+			var dataSource = inputData.concat(dataSource);
+			//資料日期排序 由小到大
+			dataSource = dataSource.sort(function(a,b){ 
+				return a.date > b.date ? 1 : -1;
+			})
+		self.creatCalendar(dataSource);
+		self.creatCalendarList(dataSource);
+		});	
 	}
 
 	// 重設資料時，月曆、tab重新產出
-	resetData () {
-		// this.self.ajaxGetJson();
+	resetData (resetData) {
+		let self = this ;
+		let $this = this.$ele;
+
+		$.ajax({
+			method: 'GET',
+			url: './json/data1.json',
+			dataType: 'json'
+		}).done(function(dataSource) {
+
+			var lookup = {};
+			var items = dataSource;
+			var dataSource = [];
+
+			for (var item, i = 0; item = items[i++];) {
+
+			  var date = item.date ;
+
+			  //不同資料的key 刪除再新增
+			  var statusKey = (item.status||item.state) ;
+              delete(item.status||item.state) ;
+              item.status = statusKey ;	
+              
+
+			  var availableVancancyKey = (item.availableVancancy||item.onsell) ;
+              delete(item.availableVancancy||item.onsell) ;
+              item.availableVancancy = availableVancancyKey ;	
+
+
+              var totalVacnacyKey = (item.totalVacnacy||item.total) ;
+              delete(item.totalVacnacy||item.total) ;
+              item.totalVacnacy = totalVacnacyKey ;
+
+
+              var guaranteedKey = (item.guaranteed || item.certain) ;
+              delete(item.guaranteed || item.certain) ;
+              item.guaranteed = guaranteedKey ;
+
+
+			  if (!(date in lookup)) {
+			    lookup[date] = 1;
+			    dataSource.push(item);
+			  }
+			}
+			//排序之前 合併陣列
+			var dataSource = resetData.concat(dataSource);
+			//資料日期排序 由小到大
+			dataSource = dataSource.sort(function(a,b){ 
+				return a.date > b.date ? 1 : -1;
+			})
+		self.creatCalendar(dataSource);
+		self.creatCalendarList(dataSource);
+		});	
 	}
 
 	// destroy calendar，destroy時連class new出來的實例物件也要刪除
