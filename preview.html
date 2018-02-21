@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="../core/core.css" rel="stylesheet">
+	<link href="../ic-ln/css.css" rel="stylesheet">
+
+	<link href="./css.css" rel="stylesheet">
+	<title>Magaele: dateTab</title>
+<link href="css.css" rel="stylesheet"></head>
+<body>
+<div class="container dateTab">
+        <div class="calendar col-md-12""></div>
+</div>
+<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="./node_modules/moment/moment.js"></script> <!--moment.js-->
+<script type="text/javascript" src="./node_modules/moment//locale/zh-tw.js"></script><!--moment.js-->
+<script src="./module.js"></script>
+<script>
+$(function() {
+    $('.calendar').dateTab({
+        dataSource: [  // 資料來源的輸入接口 [ array | string ] 如果是 string的話，請輸入網址
+        {
+            "guaranteed": true, // {boolean}
+            "date": "2016/12/15", // {string} YYYY/MM/DD
+            "price": "234567", // {string|number} XXXXXX | 近期上架
+            "availableVancancy": 0, // {number}
+            "totalVacnacy": 20, // {number}
+            "status": "報名" // {string} 報名(#24a07c) | 後補(#24a07c) | 預定(#24a07c) | 截止(#ff7800) | 額滿(#ff7800) | 關團(#ff7800)
+        },
+        // ...
+        ],
+        // 輸入一開始要在哪一個月份 [string] YYYYMM，若輸入的年月沒有資料，
+        // 就要找相近的年月，若前一個月後一個月都有資料，就顯示資料比數比較多的那一個月
+        initYearMonth: '2018-01',//YYYY-MM
+        // 設定各資料的key
+        dataKeySetting: {
+            // 保證出團
+            'guaranteed': 'guaranteed',
+            // 狀態
+            'status': 'status',
+            // 可賣團位
+            'available': 'availableVancancy',
+            // 團位
+            'total': 'totalVacnacy',
+            // 價格
+            'price': 'price'
+        },
+        // 點上一個月時
+        // @param $btn {$object} jquery 物件
+        // @param $data {array} 上一個月的資料
+        // @param module {object} 此模組實例物件
+        onClickPrev: function( $btn, data, module ) {
+            console.log($btn, data, module);
+        },
+        // 點下一個月時
+        onClickNext: function( $btn, data, module ) {
+            console.log($btn, data, module);
+        },
+        // 點日期時
+        onClickDate: function( $date, data ){
+            console.log($date, data);
+        }
+    });
+        // 下一個有資料的月份
+        $('.calendars').dateTab('nextMonth', function( data, module ) {
+            console.log(data, module);
+        });
+        // 上一個有資料的月份
+        $('.calendars').dateTab('prevMonth', function( data, module ) {
+            console.log(data, module);
+        });
+        // 切換日曆或列表模式
+        // $('.calendar').dateTab('switch');
+        // 加資料時如果有相同日期的資料，以後輸入為主，輸入時如果輸入沒有的月份，模組會加上該月份
+        $('.calendar').dateTab('inputData', [
+            {
+                "guaranteed": true, // {boolean}
+                "date": "2018/01/03", // {string} YYYY/MM/DD
+                "price": "234567", // {string|number} XXXXXX | 近期上架
+                "availableVancancy": 0, // {number}
+                "totalVacnacy": 20, // {number}
+                "status": "報名" // {string} 報名 | 後補 | 預定 | 截止 | 額滿 | 關團
+            },
+            {
+                "guaranteed": true, // {boolean}
+                "date": "2018/01/01", // {string} YYYY/MM/DD
+                "price": "234567", // {string|number} XXXXXX | 近期上架
+                "availableVancancy": 0, // {number}
+                "totalVacnacy": 20, // {number}
+                "status": "報名" // {string} 報名 | 後補 | 預定 | 截止 | 額滿 | 關團
+            }
+            // ...
+        ]);
+        // 重設資料時，月曆、tab重新產出
+        $('.calendar').dateTab('resetData', [
+            {
+                "guaranteed": true, // {boolean}
+                "date": "2016/12/15", // {string} YYYY/MM/DD
+                "price": "234567", // {string|number} XXXXXX | 近期上架
+                "availableVancancy": 0, // {number}
+                "totalVacnacy": 20, // {number}
+                "status": "報名" // {string} 報名 | 後補 | 預定 | 截止 | 額滿 | 關團
+            },
+            // ...
+        ]);
+        // destroy calendar，destroy時連class new出來的實例物件也要刪除
+        // $('.calendar').dateTab('destroy');
+});
+</script>
+<script type="text/javascript" src="module.js"></script></body>
+</html>

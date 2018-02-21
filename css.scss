@@ -1,0 +1,242 @@
+// -------------------------------------
+// Susy Import
+// -------------------------------------
+//@import "susy";
+// -------------------------------------
+// Core Mixins
+// -------------------------------------
+@import "../core/core/mixins";
+// -------------------------------------
+// Variables Import
+// -------------------------------------
+// 載入全域變數
+@import "../core/core/variables";
+// -------------------------------------
+// Components / Modules Setting
+// -------------------------------------
+// 請輸入您的ClassName
+$classname: 'dateTab';
+// -------------------------------------
+// 您的CSS Code
+// -------------------------------------
+//以下範例可以刪除，改為您自已的CSS Code
+.#{$classname} {
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+	.calendars_tabWrap{
+		position: relative;
+		width: 100%;
+		float: left;
+		overflow: hidden;
+			.prev{
+				width: 20px;
+				height: 50px;
+				float: left;
+				margin-top: 6px;
+				position: absolute;
+				background-color: #ede9dd;
+				z-index: 999;
+				&:before{
+					content: '';
+					border-style: solid;
+					border-width: 7px 12.1px 7px 0;
+					border-color: transparent #ff0000 transparent transparent;
+					position: absolute;
+					margin-top: 15px;
+					left: 5px;
+				}
+		}
+			.next{
+				@extend .prev;
+				float:right;
+				right: 0;
+				top:0;
+				&:before{
+					border-width: 7px 0 7px 12.1px;
+					border-color: transparent transparent transparent #ff0000;
+				}
+			}
+	}
+	.ntb_tab{
+		background-color: #ede9dd;
+		width: 100%;
+		display: flex;
+		justify-content:right;
+		.tab{
+			list-style-type:none;
+			min-width: 198px;
+			position: relative;
+			a{
+				text-decoration: none;
+				span{
+					margin: 6px 3px 0 ;
+					color:#666;
+					display: flex;
+					font-size: 16px;
+					height: 50px;
+					align-items:center;
+					justify-content:center;
+				}
+			}
+		}	
+	}
+	.tab_active{
+		background-color: #fff;
+		color: red!important;
+	}
+	.calendars_tableWrap{
+		border: 1px solid #f4f4f4;
+		width: 100%;
+		table-layout:fixed;
+		.calendars_weeksWrap{
+			th{
+				height: 31px;
+				line-height: 31px;
+				color:#666;
+			}
+		}
+	}
+	.day{
+		position: relative;
+		height: 85px;
+		border: 1px solid #f4f4f4;
+		cursor: pointer;
+		padding: 0 3px;
+		line-height: 16px;
+		&:hover{
+			background-color: #fff9e3;
+		}
+		span{
+			font-size: 12px;
+			display: inline-block;
+			width: 100%;
+		}
+		.day_div{
+			padding: 7px;
+			.num{
+				position: absolute;
+				top: 2px;
+				left: 2px;
+				color: #444;
+			}
+			.guaranteed{
+				position: absolute;
+				top:0px;
+				right:0px;
+				text-align: center;
+				width: 36px;
+				background-color: #66bb3c;
+				color: #fff;
+			}
+		}
+		.price{
+			color:red;
+		}
+	}
+	.calendarList{
+		display: none;
+	}
+	.list_day{
+		width: 100%;
+		height: 62px;
+		border: 1px solid #f4f4f4;
+		cursor: pointer;
+		display: flex;
+		&:hover{
+			background-color: #fff9e3;
+			border:1px solid #66bb3c;
+		}
+		.secDiv_wrap{
+			width: 70%;
+			padding: 5px;
+			.secDiv{
+				color: #666;
+				padding-bottom: 5px;
+				.list_availableVancancy{
+					margin-right:30px;
+				}
+			}
+			.list_guaranteed{
+				padding: 3px;
+				color: #fff;
+				background-color: #66bb3c;
+				&:before{
+					content: "\E6DB";
+					text-align: center;
+				}
+			}
+		}
+		.thirdDiv{
+			padding: 5px;
+			width: 20%;
+			font-size: 16px;
+			text-align: right;
+			.list_status{
+				display: block;
+
+			}
+			.list_price{
+				display: block;
+				color: #e10500;
+			}
+		}
+		.list_day_div{
+			display: flex;
+			flex-wrap:wrap;
+			justify-content:center;
+			padding: 0 5px 5px;
+			font-size: 24px;
+			color: #666;
+			width: 10%;
+			.list_week{
+				font-size: 16px;
+			}
+		}
+	}
+	.disabled{
+		background-color: #f8f8f8;
+		border:none;
+		cursor: default;
+		pointer-events:none;
+	}
+	.hasDataActive{
+		background-color: #fff9e3;
+		border:2px solid #66bb3c;
+	}
+	.list_hasDataActive{
+		@extend .hasDataActive;
+		border:1px solid #66bb3c;
+	}
+	.listPage_wrap{
+		display: none;
+		.listPage_box{
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+
+	@media screen and (min-width: $screen-phone) { // 手機 320px
+
+	}
+	@media screen and (min-width: $screen-tablet) { // 平板 768px
+
+	}
+	@media screen and (min-width: $screen-desktop) { // 筆電、桌機 980px						
+
+	}
+	@media screen and (min-width: $screen-lg-desktop) { // 較大桌機　1280px
+
+	}
+	&.#{$classname}_default {
+		
+	}
+	& > .#{$classname}_child {
+		
+	}
+	& .#{$classname}_descendant {
+
+	}
+}
