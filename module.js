@@ -212,6 +212,9 @@ var Module = function () {
 			this.self.creatMonth();
 			this.self.ajaxGetJson();
 			this.self.onClickMonth();
+			this.self.onClickNext();
+			this.self.onClickPrev();
+			this.self.onClickChang();
 		}
 	}, {
 		key: 'ajaxGetJson',
@@ -593,8 +596,12 @@ var Module = function () {
 				$(this).children().children().addClass('tab_active');
 				self.ajaxGetJson();
 			});
-
-			//左邊箭頭
+		}
+	}, {
+		key: 'onClickPrev',
+		value: function onClickPrev() {
+			var self = this;
+			var $this = this.$ele;
 			$('.prev').on('click', function () {
 				$('.ntb_tab li').css({
 					"right": "0%"
@@ -604,8 +611,12 @@ var Module = function () {
 				$this.find('.tab_active').parent().parent().next().children().children().removeClass('tab_active');
 				self.ajaxGetJson();
 			});
-
-			//右邊箭頭
+		}
+	}, {
+		key: 'onClickNext',
+		value: function onClickNext() {
+			var self = this;
+			var $this = this.$ele;
 			$('.next').on('click', function () {
 				$('.ntb_tab li').css({
 					"right": "33.3%"
@@ -614,11 +625,6 @@ var Module = function () {
 				$this.find('.tab_active').parent().parent().next().children().children().addClass('tab_active');
 				$this.find('.tab_active').parent().parent().prev().children().children().removeClass('tab_active');
 				self.ajaxGetJson();
-			});
-
-			//點擊切換列表、月曆
-			$('.changList').on('click', function () {
-				self.switch();
 			});
 		}
 
@@ -631,6 +637,14 @@ var Module = function () {
 			this.$this.find('.calendars_tableWrap').toggle(0, '.d-no');
 			this.$this.find('.calendarList').toggle(0, '.d-no');
 			this.$this.find('.listPage_wrap').toggle(0, '.d-no');
+		}
+	}, {
+		key: 'onClickChang',
+		value: function onClickChang() {
+			var self = this;
+			$('.changList').on('click', function () {
+				self.switch();
+			});
 		}
 
 		// 加資料時如果有相同日期的資料，以後輸入為主，輸入時如果輸入沒有的月份，模組會加上該月份

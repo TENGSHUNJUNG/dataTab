@@ -29,6 +29,9 @@ class Module {
 		this.self.creatMonth();	
 		this.self.ajaxGetJson();
 		this.self.onClickMonth();
+		this.self.onClickNext();
+		this.self.onClickPrev();
+		this.self.onClickChang();
 	}
 
 
@@ -468,10 +471,11 @@ class Module {
 			self.ajaxGetJson();
 		});
 
+	}
 
-
-
-		//左邊箭頭
+	onClickPrev () {
+		let self = this;
+		let $this = this.$ele;
 		$('.prev').on('click',function(){
 			$('.ntb_tab li').css({
 				"right":"0%"
@@ -481,12 +485,12 @@ class Module {
 			$this.find('.tab_active').parent().parent().next().children().children().removeClass('tab_active');
 			self.ajaxGetJson();
 		});
+	}
 
 
-
-
-
-		//右邊箭頭
+	onClickNext () {
+		let self = this;
+		let $this = this.$ele;
 		$('.next').on('click',function(){
 			$('.ntb_tab li').css({
 				"right":"33.3%"
@@ -496,17 +500,7 @@ class Module {
 			$this.find('.tab_active').parent().parent().prev().children().children().removeClass('tab_active');
 			self.ajaxGetJson();
 		});
-
-
-
-		//點擊切換列表、月曆
-		$('.changList').on('click',function(){
-			self.switch();
-		});
-		
-
 	}
-
 
 	//切換列表 月曆顯示
 	switch () {
@@ -516,7 +510,12 @@ class Module {
 		this.$this.find('.listPage_wrap').toggle(0,'.d-no');
 	}
 
-
+	onClickChang () {
+		let self = this;
+		$('.changList').on('click',function(){
+			self.switch();
+		});
+	}
 
 
 
