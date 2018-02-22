@@ -35,10 +35,7 @@ $classname: 'dateTab';
 				width: 20px;
 				height: 50px;
 				float: left;
-				margin-top: 6px;
-				position: absolute;
 				background-color: #ede9dd;
-				z-index: 999;
 				&:before{
 					content: '';
 					border-style: solid;
@@ -50,25 +47,40 @@ $classname: 'dateTab';
 				}
 		}
 			.next{
-				@extend .prev;
-				float:right;
+				width: 20px;
+				height: 50px;
+				background-color: #ede9dd;
+				float: left;
 				right: 0;
 				top:0;
+				position: relative;
 				&:before{
+					content: '';
+					border-style: solid;
 					border-width: 7px 0 7px 12.1px;
+					position: absolute;
 					border-color: transparent transparent transparent #ff0000;
+					margin-top: 15px;
+					left: 5px;
 				}
 			}
 	}
 	.ntb_tab{
-		background-color: #ede9dd;
-		width: 100%;
-		display: flex;
-		justify-content:right;
+	    float: left;
+	    width: calc(100% - 40px);
+	    margin-bottom: 0;
+	    background-color: #ede9dd;
+	    white-space: nowrap;
+	    font-size: 0;
+	    overflow: hidden;
 		.tab{
-			list-style-type:none;
-			min-width: 198px;
-			position: relative;
+			width: 33.3333%;
+		    display: inline-block;
+		    list-style-type: none;
+		    position: relative;
+		    text-align: center;
+		    vertical-align: top;
+		    height: 50px;
 			a{
 				text-decoration: none;
 				span{
@@ -127,7 +139,7 @@ $classname: 'dateTab';
 				top:0px;
 				right:0px;
 				text-align: center;
-				width: 36px;
+				width: 48px;
 				background-color: #66bb3c;
 				color: #fff;
 			}
@@ -150,7 +162,7 @@ $classname: 'dateTab';
 			border:1px solid #66bb3c;
 		}
 		.secDiv_wrap{
-			width: 70%;
+			width: 67%;
 			padding: 5px;
 			.secDiv{
 				color: #666;
@@ -186,12 +198,17 @@ $classname: 'dateTab';
 		.list_day_div{
 			display: flex;
 			flex-wrap:wrap;
+			text-align: center;
 			justify-content:center;
 			padding: 0 5px 5px;
 			font-size: 24px;
 			color: #666;
-			width: 10%;
+			width: 13%;
+			.list_day_num{
+				width: 100%;
+			}
 			.list_week{
+				width: 100%;
 				font-size: 16px;
 			}
 		}

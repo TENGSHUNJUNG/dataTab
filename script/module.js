@@ -261,8 +261,12 @@ class Module {
                 	let price = "<span class='price'>" + '$' + this.self.addCommas(dataSource[i].price)  + '起' + '</span>';
             
 
+                	if(dataSource[i].guaranteed === true){
+                		$('.'+data_date+'').children().append( guaranteed );
+                		$('.guaranteed').text('保證出團');
+                	}
+                	
 
-                	$('.'+data_date+'').children().append( guaranteed );
                 	$('.'+data_date+'').append(status + available + total + price);
 
 
@@ -320,16 +324,16 @@ class Module {
     	for (let j = 1; j <= nDays; j++) {
             	
     		if( month < 10 && j < 10 ){
-				html += '<li class="list_day hideData ' + year +'0'+ month + '0' +j +'"><div class="list_day_div">'+j+
+				html += '<li class="list_day hideData ' + year +'0'+ month + '0' +j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
 				'</div></li>';
 			}else if( month < 10 ){
-				html += '<li class="list_day hideData ' + year +'0'+ month + j +'"><div class="list_day_div">'+j+
+				html += '<li class="list_day hideData ' + year +'0'+ month + j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
 				'</div></li>';
 			}else if( j < 10 ){
-				html += '<li class="list_day hideData ' + year + month + '0' + j +'"><div class="list_day_div">'+j+
+				html += '<li class="list_day hideData ' + year + month + '0' + j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
 				'</div></li>';
 			}else{
-				html += '<li class="list_day hideData ' + year + month + j +'"><div class="list_day_div">'+j+
+				html += '<li class="list_day hideData ' + year + month + j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
 				'</div></li>';
 			}
             numRow++;
@@ -356,11 +360,18 @@ class Module {
                 	
                 	let available = "<div class='secDiv_wrap'><div class='secDiv'><span class='list_availableVancancy'>" + '可賣：' + dataSource[i].availableVancancy  + '</span>';
                 	let total = "<span class='list_totalVacnacy'>" + '團位：' + dataSource[i].totalVacnacy  + '</span></div>';
-                	let guaranteed = "<div class='secDiv_guaranteed'><span class='ic-ln list_guaranteed'>" + '保證出團：' + dataSource[i].guaranteed  + '</span></div></div>';
+                	let guaranteed = "<div class='secDiv_guaranteed'><span class='ic-ln list_guaranteed'>"  + dataSource[i].guaranteed  + '</span></div></div>';
                 	let status = "<div class='thirdDiv'><span class='list_status'>" + dataSource[i].status + '</span>';
                 	let price = "<span class='list_price'>" + '$' + this.self.addCommas(dataSource[i].price)  + '起' + '</span></div>';
-                	$('.list_day'+'.'+data_date+'').append( available + total + guaranteed + status + price);
-            		
+
+                	$('.list_day'+'.'+data_date+'').append( available + total );
+
+                	if( dataSource[i].guaranteed === true ){
+                		$('.'+data_date+'>'+'.secDiv_wrap').append(guaranteed);
+                		$('.list_guaranteed').text('保證出團');
+                	}
+
+            		$('.list_day'+'.'+data_date+'').append( status + price );
 
                 	$('.list_day'+'.'+data_date+'').addClass('hasData').removeClass('hideData');
 
@@ -566,6 +577,7 @@ class Module {
 			}
 			//排序之前 合併陣列
 			var dataSource = inputData.concat(dataSource);
+			console.log(dataSource)
 			//資料日期排序 由小到大
 			dataSource = dataSource.sort(function(a,b){ 
 				return a.date > b.date ? 1 : -1;

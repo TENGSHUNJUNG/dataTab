@@ -12,7 +12,7 @@
 <link href="css.css" rel="stylesheet"></head>
 <body>
 <div class="container dateTab">
-        <div class="calendar col-md-12""></div>
+        <div class="calendar col-md-12"></div>
 </div>
 <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script type="text/javascript" src="./node_modules/moment/moment.js"></script> <!--moment.js-->
@@ -75,25 +75,25 @@ $(function() {
         // 切換日曆或列表模式
         // $('.calendar').dateTab('switch');
         // 加資料時如果有相同日期的資料，以後輸入為主，輸入時如果輸入沒有的月份，模組會加上該月份
-        $('.calendar').dateTab('inputData', [
-            {
-                "guaranteed": true, // {boolean}
-                "date": "2018/01/03", // {string} YYYY/MM/DD
-                "price": "234567", // {string|number} XXXXXX | 近期上架
-                "availableVancancy": 0, // {number}
-                "totalVacnacy": 20, // {number}
-                "status": "報名" // {string} 報名 | 後補 | 預定 | 截止 | 額滿 | 關團
-            },
-            {
-                "guaranteed": true, // {boolean}
-                "date": "2018/01/01", // {string} YYYY/MM/DD
-                "price": "234567", // {string|number} XXXXXX | 近期上架
-                "availableVancancy": 0, // {number}
-                "totalVacnacy": 20, // {number}
-                "status": "報名" // {string} 報名 | 後補 | 預定 | 截止 | 額滿 | 關團
-            }
-            // ...
-        ]);
+        // $('.calendar').dateTab('inputData', [
+        //     {
+        //         "guaranteed": true, // {boolean}
+        //         "date": "2018/01/03", // {string} YYYY/MM/DD
+        //         "price": "234567", // {string|number} XXXXXX | 近期上架
+        //         "availableVancancy": 0, // {number}
+        //         "totalVacnacy": 20, // {number}
+        //         "status": "報名" // {string} 報名 | 後補 | 預定 | 截止 | 額滿 | 關團
+        //     },
+        //     {
+        //         "guaranteed": true, // {boolean}
+        //         "date": "2018/01/01", // {string} YYYY/MM/DD
+        //         "price": "234567", // {string|number} XXXXXX | 近期上架
+        //         "availableVancancy": 0, // {number}
+        //         "totalVacnacy": 20, // {number}
+        //         "status": "報名" // {string} 報名 | 後補 | 預定 | 截止 | 額滿 | 關團
+        //     }
+        //     // ...
+        // ]);
         // 重設資料時，月曆、tab重新產出
         // $('.calendar').dateTab('resetData', [
         //     {
