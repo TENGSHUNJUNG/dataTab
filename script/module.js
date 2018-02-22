@@ -25,7 +25,9 @@ class Module {
 								'<a href="javascript:;" class="prev"></a>'+
 								'<ul class="ntb_tab"></ul>'+
 								'<a href="javascript:;" class="next"></a>'+
-							  '</div>');
+							  '</div>'+
+							  '<div class="calendars_weeksWrap"></div>'+
+							  '<ul id="ul_wrap" class="dateTab_ul_wrap"></ul>');
 		this.self.creatMonth();	
 		this.self.ajaxGetJson();
 		this.self.onClickMonth();
@@ -99,31 +101,26 @@ class Module {
 
 	creatWeek () {
 		
-		this.$this.find('.calendars_tabWrap').append(
-										'<div class="calendars_wrap">'+
-										'<table class="calendars_tableWrap">'+
-											'<thead>'+
-												'<tr class="calendars_weeksWrap">'+
-													'<th>星期日</th>'+
-													'<th>星期一</th>'+
-													'<th>星期二</th>'+
-													'<th>星期三</th>'+
-													'<th>星期四</th>'+
-													'<th>星期五</th>'+
-													'<th>星期六</th>'+
-												'</tr>'+'</thead>'+
-												'<tbody id="tbody" class="tbody">');
-    	this.$this.find('.calendars_wrap').append('<div class="calendars_list_wrap">'+
-    												'<ul id="calendarList" class="calendarList" style="min-height: 496px;"></ul>'+
-														'</div></tbody></table>'+
-														'<div class="listPage_wrap">'+
-    														'<div class="listPage_box">'+
-    														'<div class="list_prev"><a href="javascript:;">«上一頁</a></div>'+
-    														'<div class="current_page"></div>'+
-    														'<div class="list_next"><a href="javascript:;">下一頁»</a></div>'+
-    														'</div>'+
-    													'</div>'+
-    												'</div>');
+		this.$this.find('.calendars_weeksWrap').append('<span>星期日</span>'+
+													'<span>星期一</span>'+
+													'<span>星期二</span>'+
+													'<span>星期三</span>'+
+													'<span>星期四</span>'+
+													'<span>星期五</span>'+
+													'<span>星期六</span>'+
+												'</div>');
+
+    	// this.$this.find('.calendars_wrap').append('<div class="calendars_list_wrap">'+
+    	// 											'<ul id="calendarList" class="calendarList" style="min-height: 496px;"></ul>'+
+					// 									'</div></tbody></div>'+
+					// 									'<div class="listPage_wrap">'+
+    	// 													'<div class="listPage_box">'+
+    	// 													'<div class="list_prev"><a href="javascript:;">«上一頁</a></div>'+
+    	// 													'<div class="current_page"></div>'+
+    	// 													'<div class="list_next"><a href="javascript:;">下一頁»</a></div>'+
+    	// 													'</div>'+
+    	// 												'</div>'+
+    	// 											'</div>');
 	}
 
 
@@ -174,47 +171,44 @@ class Module {
         let html = '';
         
 
-        html += '<tr class="days">';
 
 
         //月曆開頭
         for (i = 0; i < startDay; i++) {
-	        html += '<td class="day disabled"></td>';
+	        html += '<li class="dateTab_day disabled"></td>';
 	        numRow++;
     	}
 
     	//本月日期
     	for (let j = 1; j <= nDays; j++) {
     		if( month < 10 && j < 10 ){
-				html += '<td class="day ' + year +'0'+ month + '0' +j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+				html += '<li class="hideData dateTab_day ' + year +'0'+ month + '0' +j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
 			}else if( month < 10 ){
-				html += '<td class="day ' + year +'0'+ month + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+				html += '<li class="hideData dateTab_day ' + year +'0'+ month + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
 			}else if( j < 10 ){
-				html += '<td class="day ' + year + month + '0' + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+				html += '<li class="hideData dateTab_day ' + year + month + '0' + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
 			}else{
-				html += '<td class="day ' + year + month + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+				html += '<li class="hideData dateTab_day ' + year + month + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
 			}
             numRow++;
         if (numRow == 7) {  //如果已經到一行（一週）了，建造新的tr
             numRow = 0;
-            html += '</tr><tr class="days">';
         	}
         }
 
         //本月結尾
         let lastDay = startDay + nDays ;
         for (i = lastDay; i < 42; i++) {
-	        html += '<td class="day disabled"></td>';
+	        html += '<li class="dateTab_day disabled"></li>';
 	        numRow++;
         if (numRow == 7) {  //如果已經到一行（一週）了，建造新的tr
             numRow = 0;
-            html += '</tr><tr class="days">';
             }
     	}
 
     	
     	
-    	document.getElementById("tbody").innerHTML = html;
+    	document.getElementById("ul_wrap").innerHTML = html;
 		// $this.find('.calendars_tableWrap').append('</tbody></table></div>');
 
 
@@ -222,7 +216,7 @@ class Module {
     	let dataOfDate = dataSource.length;
 
             for (i=0; i<dataOfDate; i++){
-                let $day = this.$this.find('.day');
+                let $day = this.$this.find('.dateTab_day');
                 let dataYear = dataSource[i].date.substring(0,4);
                 let dataMonth = dataSource[i].date.substring(5,7);
                 let dataDay = dataSource[i].date.substring(8,10);
@@ -261,14 +255,17 @@ class Module {
                 	let price = "<span class='price'>" + '$' + this.self.addCommas(dataSource[i].price)  + '起' + '</span>';
             
 
-                	if(dataSource[i].guaranteed === true){
-                		$('.'+data_date+'').children().append( guaranteed );
-                		$('.guaranteed').text('保證出團');
-                	}
+
                 	
 
-                	$('.'+data_date+'').append(status + available + total + price);
+                	$('.'+data_date+'').append(status + available + total);
 
+                	if(dataSource[i].guaranteed === true){
+                		console.log($('.'+data_date+'>'+'span:nth-child(3)'))
+                		$('.'+data_date+'').append( guaranteed );
+                		$('.guaranteed').text('保證出團');
+                	}
+                	$('.'+data_date+'').append(price);
 
                 	//如果資料內其中一筆 是undefined 就刪除所有資料
                 	if( dataSource[i].guaranteed === undefined || dataSource[i].date === undefined || dataSource[i].price === undefined || dataSource[i].totalVacnacy === undefined || dataSource[i].status === undefined ){
@@ -302,46 +299,57 @@ class Module {
 
 
 	creatCalendarList (dataSource) {
-		let today = new Date();
+		// let today = new Date();
 
-		//抓取active選擇到的年、月份
-        let year = parseInt($(".tab_active").text().slice(0, 4));
-        let month = parseInt($(".tab_active").text().slice(4, 8));
-
-
-        let day = today.getDate();
+		// //抓取active選擇到的年、月份
+  //       let year = parseInt($(".tab_active").text().slice(0, 4));
+  //       let month = parseInt($(".tab_active").text().slice(4, 8));
 
 
-        //本月有多少天 可以用上個月的0 來表示這個月的最後一天
-        let nDays = new Date(year, month, 0).getDate();
+  //       let day = today.getDate();
 
-        let numRow = 0;  //到達7的時候創建tr
+
+  //       //本月有多少天 可以用上個月的0 來表示這個月的最後一天
+  //       let nDays = new Date(year, month, 0).getDate();
+
+  //       let numRow = 0;  //到達7的時候創建tr
         let i;        //日期
-        let html = '';
+  //       let html = '';
 
 
     	
-    	for (let j = 1; j <= nDays; j++) {
+   //  	for (let j = 1; j <= nDays; j++) {
             	
-    		if( month < 10 && j < 10 ){
-				html += '<li class="list_day hideData ' + year +'0'+ month + '0' +j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
-				'</div></li>';
-			}else if( month < 10 ){
-				html += '<li class="list_day hideData ' + year +'0'+ month + j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
-				'</div></li>';
-			}else if( j < 10 ){
-				html += '<li class="list_day hideData ' + year + month + '0' + j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
-				'</div></li>';
-			}else{
-				html += '<li class="list_day hideData ' + year + month + j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
-				'</div></li>';
-			}
-            numRow++;
+   //  		if( month < 10 && j < 10 ){
+			// 	html += '<li class="list_day hideData ' + year +'0'+ month + '0' +j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
+			// 	'</div></li>';
+			// }else if( month < 10 ){
+			// 	html += '<li class="list_day hideData ' + year +'0'+ month + j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
+			// 	'</div></li>';
+			// }else if( j < 10 ){
+			// 	html += '<li class="list_day hideData ' + year + month + '0' + j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
+			// 	'</div></li>';
+			// }else{
+			// 	html += '<li class="list_day hideData ' + year + month + j +'"><div class="list_day_div"><span class="list_day_num">'+j+'</span>'
+			// 	'</div></li>';
+			// }
+   //          numRow++;
 
-        }
-
+   //      }
+   //  	for (let j = 1; j <= nDays; j++) {
+   //  		if( month < 10 && j < 10 ){
+			// 	html += '<li class="dateTab_day hideData' + year +'0'+ month + '0' +j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+			// }else if( month < 10 ){
+			// 	html += '<li class="dateTab_day hideData' + year +'0'+ month + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+			// }else if( j < 10 ){
+			// 	html += '<li class="dateTab_day hideData' + year + month + '0' + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+			// }else{
+			// 	html += '<li class="dateTab_day hideData' + year + month + j +'"><div class="day_div"><span class="num">'+ j +'</span></div></td>';
+			// }
+   //          numRow++;
+   //      }
     	
-    	document.getElementById("calendarList").innerHTML = html;
+    	// document.getElementById("ul_wrap").innerHTML = html;
 
 
     	let dataOfDate = dataSource.length;
@@ -355,48 +363,66 @@ class Module {
                
 
              
-                if($('.list_day').hasClass(data_date)){
+                // if($('.list_day').hasClass(data_date)){
 
+	              	// let guaranteed = "<span class='guaranteed'>" + dataSource[i].guaranteed + '</span>'
+                // 	let status = "<span class='status'>" + dataSource[i].status + '</span>';
+                // 	let available = "<span class='availableVancancy'>" + '可賣：' + dataSource[i].availableVancancy  + '</span>';
+                // 	let total = "<span class='totalVacnacy'>" + '團位：' + dataSource[i].totalVacnacy  + '</span>';
+                // 	let price = "<span class='price'>" + '$' + this.self.addCommas(dataSource[i].price)  + '起' + '</span>';   	
+                // 	// let available = "<div class='secDiv_wrap'><div class='secDiv'><span class='list_availableVancancy'>" + '可賣：' + dataSource[i].availableVancancy  + '</span>';
+                // 	// let total = "<span class='list_totalVacnacy'>" + '團位：' + dataSource[i].totalVacnacy  + '</span></div>';
+                // 	// let guaranteed = "<div class='secDiv_guaranteed'><span class='ic-ln list_guaranteed'>"  + dataSource[i].guaranteed  + '</span></div></div>';
+                // 	// let status = "<div class='thirdDiv'><span class='list_status'>" + dataSource[i].status + '</span>';
+                // 	// let price = "<span class='list_price'>" + '$' + this.self.addCommas(dataSource[i].price)  + '起' + '</span></div>';
+                // 	if(dataSource[i].guaranteed === true){
+                // 		$('.'+data_date+'').children().append( guaranteed );
+                // 		$('.guaranteed').text('保證出團');
+                // 	}
                 	
-                	let available = "<div class='secDiv_wrap'><div class='secDiv'><span class='list_availableVancancy'>" + '可賣：' + dataSource[i].availableVancancy  + '</span>';
-                	let total = "<span class='list_totalVacnacy'>" + '團位：' + dataSource[i].totalVacnacy  + '</span></div>';
-                	let guaranteed = "<div class='secDiv_guaranteed'><span class='ic-ln list_guaranteed'>"  + dataSource[i].guaranteed  + '</span></div></div>';
-                	let status = "<div class='thirdDiv'><span class='list_status'>" + dataSource[i].status + '</span>';
-                	let price = "<span class='list_price'>" + '$' + this.self.addCommas(dataSource[i].price)  + '起' + '</span></div>';
 
-                	$('.list_day'+'.'+data_date+'').append( available + total );
-
-                	if( dataSource[i].guaranteed === true ){
-                		$('.'+data_date+'>'+'.secDiv_wrap').append(guaranteed);
-                		$('.list_guaranteed').text('保證出團');
-                	}
-
-            		$('.list_day'+'.'+data_date+'').append( status + price );
-
-                	$('.list_day'+'.'+data_date+'').addClass('hasData').removeClass('hideData');
-
-                	//如果資料內其中一筆 是undefined 就刪除所有資料 除了可賣數量可以為0
-                	if( dataSource[i].guaranteed === undefined || dataSource[i].date === undefined || dataSource[i].price === undefined || dataSource[i].totalVacnacy === undefined || dataSource[i].status === undefined ){
-                		$('.calendarList'+'>'+'.'+data_date+'').remove();
-                	}
+                	// $('.'+data_date+'').append(status + available + total + price);
 
 
-                	//不同狀態 產生不同顏色
-                	if(dataSource[i].status === '報名' || dataSource[i].status === '預定' || dataSource[i].status === '後補' ){
-                		$('.'+data_date+'>'+'.thirdDiv'+'>'+'span:nth-child(1)').css('color','#24a07c');
-                	}else if(dataSource[i].status === '額滿' || dataSource[i].status === '截止' || dataSource[i].status === '關團'){
-                		$('.'+data_date+'>'+'.thirdDiv'+'>'+'span:nth-child(1)').css('color','#ff7800');
-                	};
+                	//如果資料內其中一筆 是undefined 就刪除所有資料
+                	// if( dataSource[i].guaranteed === undefined || dataSource[i].date === undefined || dataSource[i].price === undefined || dataSource[i].totalVacnacy === undefined || dataSource[i].status === undefined ){
+                	// 	$('.'+data_date+'>'+'.day_div'+'>'+'span:nth-child(2)').remove();
+                	// 	$('.'+data_date+'>'+'span').remove();
+                	// }
+              //   	$('.list_day'+'.'+data_date+'').append( available + total );
+
+              //   	if( dataSource[i].guaranteed === true ){
+              //   		$('.'+data_date+'>'+'.secDiv_wrap').append(guaranteed);
+              //   		$('.list_guaranteed').text('保證出團');
+              //   	}
+
+            		// $('.list_day'+'.'+data_date+'').append( status + price );
+            	if($('.dateTab_listmode .dateTab_day').hasClass(data_date)){
+                	$('.'+data_date+'').addClass('hasData').removeClass('hideData');
+                }
+
+              //   	//如果資料內其中一筆 是undefined 就刪除所有資料 除了可賣數量可以為0
+              //   	if( dataSource[i].guaranteed === undefined || dataSource[i].date === undefined || dataSource[i].price === undefined || dataSource[i].totalVacnacy === undefined || dataSource[i].status === undefined ){
+              //   		$('.calendarList'+'>'+'.'+data_date+'').remove();
+              //   	}
+
+
+              //   	//不同狀態 產生不同顏色
+              //   	if(dataSource[i].status === '報名' || dataSource[i].status === '預定' || dataSource[i].status === '後補' ){
+              //   		$('.'+data_date+'>'+'.thirdDiv'+'>'+'span:nth-child(1)').css('color','#24a07c');
+              //   	}else if(dataSource[i].status === '額滿' || dataSource[i].status === '截止' || dataSource[i].status === '關團'){
+              //   		$('.'+data_date+'>'+'.thirdDiv'+'>'+'span:nth-child(1)').css('color','#ff7800');
+              //   	};
 
 
 
-                	//點擊含有資料的td
-                	$list_day.on('click',function(){
-	                		$list_day.removeClass('list_hasDataActive');
-	                		$(this).addClass('list_hasDataActive');
-                	});
+              //   	//點擊含有資料的td
+              //   	$list_day.on('click',function(){
+	             //    		$list_day.removeClass('list_hasDataActive');
+	             //    		$(this).addClass('list_hasDataActive');
+              //   	});
 
-                }//if
+                // }//if
 
                 //增加星期幾
                 //要輸入 , 串起來 才能印出時間
@@ -405,12 +431,12 @@ class Module {
                 let list_day = new Date(list_days).getDay() ; //只抓取 星期幾
                 let list_week = '<span class="list_week">' + list_day_ch[list_day] + '</span>'; //對應到的日期 轉成中文
 
-		        // console.log(list_week)
-		        $('.'+data_date+ '>' + '.list_day_div' ).append(list_week);
+		        // // console.log(list_week)
+		        $('.' +data_date+'>'+'.day_div').append(list_week);
 
             }//for迴圈
-            $('.hideData').remove();
-            this.self.creatPagination();
+            $('.dateTab_listmode .hideData').addClass('d-no');
+            // this.self.creatPagination();
 	}
 
 

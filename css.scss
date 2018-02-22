@@ -25,6 +25,7 @@ $classname: 'dateTab';
 		margin: 0;
 		padding: 0;
 		box-sizing: border-box;
+		list-style-type: none;
 	}
 	.calendars_tabWrap{
 		position: relative;
@@ -99,54 +100,13 @@ $classname: 'dateTab';
 		background-color: #fff;
 		color: red!important;
 	}
-	.calendars_tableWrap{
-		border: 1px solid #f4f4f4;
-		width: 100%;
-		table-layout:fixed;
-		.calendars_weeksWrap{
-			th{
-				height: 31px;
-				line-height: 31px;
-				color:#666;
-			}
-		}
-	}
-	.day{
-		position: relative;
-		height: 85px;
-		border: 1px solid #f4f4f4;
-		cursor: pointer;
-		padding: 0 3px;
-		line-height: 16px;
-		&:hover{
-			background-color: #fff9e3;
-		}
-		span{
-			font-size: 12px;
-			display: inline-block;
+	.calendars_weeksWrap{
 			width: 100%;
-		}
-		.day_div{
-			padding: 7px;
-			.num{
-				position: absolute;
-				top: 2px;
-				left: 2px;
-				color: #444;
-			}
-			.guaranteed{
-				position: absolute;
-				top:0px;
-				right:0px;
+			display: flex;
+			span{
+				flex: 1;
 				text-align: center;
-				width: 48px;
-				background-color: #66bb3c;
-				color: #fff;
 			}
-		}
-		.price{
-			color:red;
-		}
 	}
 	.calendarList{
 		display: none;
@@ -213,12 +173,6 @@ $classname: 'dateTab';
 			}
 		}
 	}
-	.disabled{
-		background-color: #f8f8f8;
-		border:none;
-		cursor: default;
-		pointer-events:none;
-	}
 	.hasDataActive{
 		background-color: #fff9e3;
 		border:2px solid #66bb3c;
@@ -247,13 +201,124 @@ $classname: 'dateTab';
 	@media screen and (min-width: $screen-lg-desktop) { // 較大桌機　1280px
 
 	}
-	&.#{$classname}_default {
-		
+	&.#{$classname}_daymode {
+		& > .#{$classname}_ul_wrap{
+			display: flex;
+			flex-wrap: wrap;
+			& > .#{$classname}_day{
+				cursor: pointer;
+				width: (100%/7);
+				min-height: 85px;
+				border: 1px solid #eee;
+				border-left-width: 0;
+				border-top-width: 0;
+				display: block;
+				position: relative;
+				&:hover{
+					background-color: #fff9e3;
+				}
+				&:last-child {
+					border-right-width: 1px;
+				}
+				&:nth-child(-n + 7) {
+					border-top-width: 1px;
+				}
+				&:nth-child(7n+1) {
+					border-left-width: 1px;
+				}
+				& > .date {
+					& > .weekday {
+						display: none;
+					}
+				}
+				& > .status, & > .sell,& > .group,& > .tip,& > .price {
+					display: block;
+				}
+			}
+				.disabled{
+					background-color: #f8f8f8;
+					border:none;
+					cursor: default;
+					pointer-events:none;
+				}
+				span{
+					font-size: 12px;
+					display: inline-block;
+					width: 100%;
+				}
+				.day_div{
+					// padding: 7px;
+					position: relative;
+					.num{
+						top: 2px;
+						left: 2px;
+						color: #444;
+					}
+				}
+				.guaranteed{
+					position: absolute;
+					top:0px;
+					right:0px;
+					text-align: center;
+					width: 48px;
+					background-color: #66bb3c;
+					color: #fff;
+				}
+				.price{
+					color:red;
+				}
+		}
 	}
-	& > .#{$classname}_child {
-		
-	}
-	& .#{$classname}_descendant {
-
+	&.#{$classname}_listmode {
+		& > .calendars_weeksWrap {
+			display: none;
+		}
+		& > .#{$classname}_ul_wrap{
+			display: block;
+			& > .#{$classname}_day{
+				    width: 100%;
+   					min-height: auto;
+   					border: 1px solid #eee;
+   					@include clearfix;
+   				}
+					.day_div{
+   						float: left;
+   						display: grid;
+   						text-align: center;
+   						font-size: 24px;
+   						color: #666;
+   						padding: 0 5px 5px;
+   						.list_week{
+							font-size: 16px;
+   						}
+   					}
+   					.status{
+   						float: right;
+   						font-size: 16px;
+   						padding-right: 5px;
+   					}
+   					.availableVancancy{
+   						display: inline-block;
+   						margin: 5px 20px 5px;
+   					}
+   					.totalVacnacy{
+   						@extend .availableVancancy;
+   					}
+   					.guaranteed{
+   						margin: 10px 20px 5px;
+					    float: left;
+					    clear: right;
+					    background-color: #66bb3c;
+					    color:#fff;
+   					}
+   					.price{
+   						float: right;
+   						font-size: 16px;
+   						color: red;
+   						clear: right;
+   						padding-top:10px;
+   						padding-right: 5px;
+   					}
+		}
 	}
 }
