@@ -620,7 +620,7 @@ var Module = function () {
 			}).done(function (dataSource) {
 
 				var lookup = {};
-				var items = dataSource;
+				var items = _inputData.concat(dataSource);
 				var dataSource = [];
 
 				for (var item, i = 0; item = items[i++];) {
@@ -649,14 +649,11 @@ var Module = function () {
 						dataSource.push(item);
 					}
 				}
-				//排序之前 合併陣列
-				var dataSource = _inputData.concat(dataSource);
 				//資料日期排序 由小到大
 				dataSource = dataSource.sort(function (a, b) {
 					return a.date > b.date ? 1 : -1;
 				});
 				self.creatCalendar(dataSource);
-				self.creatCalendarList(dataSource);
 			});
 		}
 
@@ -675,7 +672,7 @@ var Module = function () {
 			}).done(function (dataSource) {
 
 				var lookup = {};
-				var items = dataSource;
+				var items = _resetData.concat(dataSource);;
 				var dataSource = [];
 
 				for (var item, i = 0; item = items[i++];) {
@@ -704,14 +701,12 @@ var Module = function () {
 						dataSource.push(item);
 					}
 				}
-				//排序之前 合併陣列
-				var dataSource = _resetData.concat(dataSource);
+				// var dataSource = resetData.concat(dataSource);
 				//資料日期排序 由小到大
 				dataSource = dataSource.sort(function (a, b) {
 					return a.date > b.date ? 1 : -1;
 				});
 				self.creatCalendar(dataSource);
-				self.creatCalendarList(dataSource);
 			});
 		}
 
