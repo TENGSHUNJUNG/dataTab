@@ -21,260 +21,223 @@ $classname: 'dateTab';
 // -------------------------------------
 //以下範例可以刪除，改為您自已的CSS Code
 .#{$classname} {
-	*{
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-		list-style-type: none;
-	}
-	.calendars_tabWrap{
-		position: relative;
-		width: 100%;
-		float: left;
-		overflow: hidden;
-			.prev{
-				width: 20px;
-				height: 50px;
-				float: left;
-				background-color: #ede9dd;
-				&:before{
-					content: '';
-					border-style: solid;
-					border-width: 7px 12.1px 7px 0;
-					border-color: transparent #ff0000 transparent transparent;
-					position: absolute;
-					margin-top: 15px;
-					left: 5px;
-				}
-		}
-			.next{
-				width: 20px;
-				height: 50px;
-				background-color: #ede9dd;
-				float: left;
-				position: relative;
-				&:before{
-					content: '';
-					border-style: solid;
-					border-width: 7px 0 7px 12.1px;
-					position: absolute;
-					border-color: transparent transparent transparent #ff0000;
-					margin-top: 15px;
-					right: 5px;
-				}
-			}
-	}
-	.ntb_tab{
-	    float: left;
-	    width: calc(100% - 40px);
-	    margin-bottom: 0;
-	    background-color: #ede9dd;
-	    white-space: nowrap;
-	    font-size: 0;
-	    overflow: hidden;
-		.tab{
-			width: 33.3333%;
-		    display: inline-block;
-		    list-style-type: none;
-		    position: relative;
-		    text-align: center;
-		    vertical-align: top;
-		    height: 50px;
-			a{
-				text-decoration: none;
-				span{
-					margin: 6px 3px 0 ;
-					color:#666;
-					display: flex;
-					font-size: 16px;
-					height: 50px;
-					align-items:center;
-					justify-content:center;
-				}
-			}
-		}	
-	}
-	.tab_active{
-		background-color: #fff;
-		color: red!important;
-	}
-	.calendars_weeksWrap{
-			width: 100%;
-			display: flex;
-			span{
-				flex: 1;
-				text-align: center;
-			}
-	}
+    &>.calendars_tabWrap {
+        display: flex;
+        &>.prev {
+            width: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ede9dd;
+            &:before {
+                content: '';
+                border-style: solid;
+                border-width: 7px 7px 7px 0;
+                border-color: transparent #e10500 transparent transparent;
+                position: absolute;
+            }
+        }
+        &>.next {
+            width: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ede9dd;
+            &:before {
+                content: '';
+                border-style: solid;
+                border-width: 7px 0 7px 7px;
+                position: absolute;
+                border-color: transparent transparent transparent #e10500;
+            }
+        }
+        &>.ntb_tab {
+            padding: 0;
+            margin-bottom: 0;
+            flex: 1;
+            background-color: #ede9dd;
+            white-space: nowrap;
+            overflow: hidden;
+            &>.tab {
+                width: 33.3%;
+                display: inline-block;
+                margin-top: 6px;
+                &>.month_a {
+                    text-decoration: none;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    &>span {
+                        text-align: center;
+                        font-size: 16px;
+                        color: #666;
+                        width: 100%;
+                        padding: 13px 0;
+                    }
+                }
+            }
+        }
+    }
+    &>.calendars_weeksWrap {
+        display: flex;
+        &>span {
+            flex: 1;
+            text-align: center;
+        }
+    }
+    .tab_active {
+        background-color: #fff;
+    }
 
-	@media screen and (min-width: $screen-phone) { // 手機 320px
-
-	}
-	@media screen and (min-width: $screen-tablet) { // 平板 768px
-
-	}
-	@media screen and (min-width: $screen-desktop) { // 筆電、桌機 980px						
-
-	}
-	@media screen and (min-width: $screen-lg-desktop) { // 較大桌機　1280px
-
-	}
-	&.#{$classname}_daymode {
-		& > .#{$classname}_ul_wrap{
-			display: flex;
-			flex-wrap: wrap;
-			& > .#{$classname}_day{
-				cursor: pointer;
-				width: (100%/7);
-				min-height: 85px;
-				border: 1px solid #eee;
-				font-size: 12px;
-				line-height: 16px;
-				border-left-width: 0;
-				border-top-width: 0;
-				display: block;
-				position: relative;
-				&:hover{
-					background-color: #fff9e3;
-				}
-				&:last-child {
-					border-right-width: 1px;
-				}
-				&:nth-child(-n + 7) {
-					border-top-width: 1px;
-				}
-				&:nth-child(7n+1) {
-					border-left-width: 1px;
-				}
-				& > .date {
-					& > .weekday {
-						display: none;
-					}
-				}
-				& > .status, & > .sell,& > .group,& > .tip,& > .price {
-					display: block;
-				}
-			}
-				.disabled{
-					background-color: #f8f8f8;
-					border:none;
-					cursor: default;
-					pointer-events:none;
-				}
-				span{
-					font-size: 12px;
-					display: inline-block;
-					width: 100%;
-				}
-				.day_div{
-					// padding: 7px;
-					position: relative;
-					.num{
-						top: 2px;
-						left: 2px;
-						color: #444;
-					}
-				}
-				.guaranteed{
-					position: absolute;
-					top:0px;
-					right:0px;
-					text-align: center;
-					width: 48px;
-					height: 20px;
-					line-height: 20px;
-					background-color: #66bb3c;
-					color: #fff;
-				}
-				.price{
-					color:red;
-				}
-		}
-	.hasDataActive{
-		background-color: #fff9e3;
-		border:2px solid #66bb3c !important;
-	}
-	}
-	&.#{$classname}_listmode {
-		& > .calendars_weeksWrap {
-			height: 0;
-			span{
-				display: none;
-			}
-		}
-		& > .#{$classname}_ul_wrap{
-			display: block;
-			min-height: 606px;
-			& > .#{$classname}_day{
-				    width: 100%;
-				    cursor: pointer;
-   					min-height: auto;
-   					border: 1px solid #eee;
-   					@include clearfix;
-   				}
-					.day_div{
-   						float: left;
-   						display: grid;
-   						text-align: center;
-   						font-size: 24px;
-   						color: #666;
-   						padding: 0 5px 5px;
-   						.list_week{
-							font-size: 16px;
-   						}
-   					}
-   					.status{
-   						float: right;
-   						font-size: 16px;
-   						padding-right: 5px;
-   					}
-   					.availableVancancy{
-   						display: inline-block;
-   						margin: 5px 20px 5px;
-   					}
-   					.totalVacnacy{
-   						@extend .availableVancancy;
-   					}
-   					.guaranteed{
-   						padding: 0 5px;
-   						margin: 10px 20px 5px;
-   						line-height: 1.5;
-					    float: left;
-					    clear: right;
-					    background-color: #66bb3c;
-					    color:#fff;
-					    &:before{    				
-							content: "\E6DB";
-							text-align: center;
-						}
-   					}
-   					.price{
-   						float: right;
-   						font-size: 16px;
-   						color: red;
-   						clear: right;
-   						padding-top:10px;
-   						padding-right: 5px;
-   					}
-		}
-	.listPage_wrap{
-		.listPage_box{
-			display: flex;
-			 justify-content: space-between;
-			.list_prev{
-				
-			}
-			.current_page{
-				text-align: center;
-			}
-			.list_next{
-
-			}
-		}
-	}
-	.hasDataActive{
-		background-color: #fff9e3;
-		border:1px solid #66bb3c !important;
-	}
-	}
+    &.#{$classname}_daymode {
+        &>.#{$classname}_ul_wrap {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+            &>.#{$classname}_day {
+                cursor: pointer;
+                width: (100%/7);
+                min-height: 85px;
+                border: 1px solid #eee;
+                font-size: 12px;
+                line-height: 16px;
+                border-left-width: 0;
+                border-top-width: 0;
+                display: block;
+                position: relative;
+                &:hover {
+                    background-color: #fff9e3;
+                }
+                &:last-child {
+                    border-right-width: 1px;
+                }
+                &:nth-child(-n + 7) {
+                    border-top-width: 1px;
+                }
+                &:nth-child(7n+1) {
+                    border-left-width: 1px;
+                }
+                &>.date {
+                    &>.weekday {
+                        display: none;
+                    }
+                }
+                &>span {
+                    font-size: 12px;
+                    display: block;
+                }
+                &>.day_div {
+                    position: relative;
+                    .num {
+                        top: 2px;
+                        left: 2px;
+                        color: #444;
+                    }
+                }
+                &>.guaranteed {
+                    position: absolute;
+                    top: 0px;
+                    right: 0px;
+                    text-align: center;
+                    width: 48px;
+                    height: 20px;
+                    line-height: 20px;
+                    background-color: #66bb3c;
+                    color: #fff;
+                }
+                &>.price {
+                    color: red;
+                }
+            }
+            &>.disabled {
+                background-color: #f8f8f8;
+                border: none;
+                pointer-events: none;
+            }
+        }
+        .hasDataActive {
+            background-color: #fff9e3;
+            border: 2px solid #66bb3c !important;
+        }
+    }
+    &.#{$classname}_listmode {
+        &>.dateTab_ul_wrap {
+            list-style: none;
+            padding: 0;
+        }
+        &>.calendars_weeksWrap {
+            display: none;
+        }
+        &>.#{$classname}_ul_wrap {
+            display: block;
+            min-height: 539px;
+            &>.#{$classname}_day {
+                cursor: pointer;
+                border: 1px solid #eee;
+                border-bottom: none;
+                @include clearfix;
+                &:hover{
+	                background-color: #fff9e3;
+	                border: 1px solid #66bb3c;
+                }
+                &>.day_div {
+                    float: left;
+                    display: grid;
+                    text-align: center;
+                    font-size: 24px;
+                    color: #666;
+                    padding: 0 5px 5px;
+                    &>.list_week {
+                        font-size: 16px;
+                    }
+                }
+                &>.status {
+                    float: right;
+                    font-size: 16px;
+                    padding-right: 5px;
+                }
+                &>.availableVancancy {
+                    display: inline-block;
+                    margin: 5px 20px 5px;
+                }
+                &>.totalVacnacy {
+                    @extend .availableVancancy;
+                }
+                &>.guaranteed {
+                    padding: 0 5px;
+                    margin: 10px 20px 5px;
+                    line-height: 1.5;
+                    float: left;
+                    clear: right;
+                    background-color: #66bb3c;
+                    color: #fff;
+                    &:before {
+                        content: "\E6DB";
+                        text-align: center;
+                    }
+                }
+                &>.price {
+                    float: right;
+                    font-size: 16px;
+                    color: red;
+                    clear: right;
+                    padding-top: 10px;
+                    padding-right: 5px;
+                }
+            }
+            &>.hasDataActive {
+                background-color: #fff9e3;
+                border: 1px solid #66bb3c !important;
+            }
+        }
+        &>.listPage_wrap {
+            &>.listPage_box {
+                display: flex;
+                justify-content: space-between;
+                &>.current_page {
+                    text-align: center;
+                }
+            }
+        }
+    }
 }
