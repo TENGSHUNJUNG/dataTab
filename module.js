@@ -213,8 +213,8 @@ var Module = function () {
             this.self.creatMonth();
             this.self.ajaxGetJson();
             this.self.onClickMonth();
-            this.self.onClickNext();
-            this.self.onClickPrev();
+            // this.self.onClickNext();
+            // this.self.onClickPrev();
             this.self.onClickChang();
         }
     }, {
@@ -276,19 +276,66 @@ var Module = function () {
     }, {
         key: 'creatMonth',
         value: function creatMonth() {
+            var self = this;
+            var $this = this.$ele;
             var initYearMonth = this.option.initYearMonth;
             var $ntb_tab = this.$this.find('.ntb_tab');
             var html = '';
             var i = void 0;
-            for (i = 0; i <= 3; i++) {
+            var newMonth = 0;
+
+            for (i = 0; i <= 2; i++) {
                 var nextMonth = moment(initYearMonth).add(i, 'months').format("YYYY MMM");
                 html += '<li class="tab"><a href="#" class="month_a"><span>' + nextMonth + '</span></a></li>';
             }
             $ntb_tab.append(html);
             this.$this.find('.tab:first-child ').addClass('tab_active');
             this.$this.find('.tab:first-child ').children().children().css('color', '#e10500');
-
             this.self.creatWeek();
+
+            //next箭頭
+            this.$this.find('.next').on('click', function () {
+                if ($this.find('.tab:nth-child(3)').hasClass('tab_active') === false) {
+                    $this.find('.tab_active').next().addClass('tab_active');
+                    $this.find('.tab_active').children().children().css('color', '#e10500');
+                    $this.find('.tab_active').prev().children().children().css('color', '#666');
+                    $this.find('.tab_active').prev().removeClass('tab_active');
+                    self.ajaxGetJson();
+                } else {
+                    newMonth = newMonth + 3;
+                    $this.find('.ntb_tab').empty();
+                    for (var _i = newMonth; _i <= newMonth + 2; _i++) {
+                        var nextNewMonth = moment(initYearMonth).add(_i, 'months').format("YYYY MMM");
+                        var nextMonthHtml = '<li class="tab"><a href="#" class="month_a"><span>' + nextNewMonth + '</span></a></li>';
+                        $ntb_tab.append(nextMonthHtml);
+                        $this.find('.tab:first-child ').addClass('tab_active');
+                        $this.find('.tab:first-child ').children().children().css('color', '#e10500');
+                        self.ajaxGetJson();
+                    }
+                }
+            });
+
+            // prev箭頭
+            this.$this.find('.prev').on('click', function () {
+                if (self.$this.find('.tab:nth-child(1)').hasClass('tab_active') === false) {
+                    $this.find('.tab_active').prev().addClass('tab_active');
+                    $this.find('.tab_active').children().children().css('color', '#e10500');
+                    $this.find('.tab_active').next().children().children().css('color', '#666');
+                    $this.find('.tab_active').next().removeClass('tab_active');
+                    self.ajaxGetJson();
+                } else {
+                    newMonth = newMonth - 3;
+                    $this.find('.ntb_tab').empty();
+                    for (var _i2 = newMonth; _i2 <= newMonth + 2; _i2++) {
+                        var prevNewMonth = moment(initYearMonth).add(_i2, 'months').format("YYYY MMM");
+                        var prevMonthHtml = '<li class="tab"><a href="#" class="month_a"><span>' + prevNewMonth + '</span></a></li>';
+                        $ntb_tab.append(prevMonthHtml);
+                        $this.find('.tab:nth-child(3) ').addClass('tab_active');
+                        $this.find('.tab:nth-child(3) ').children().children().css('color', '#e10500');
+                        self.ajaxGetJson();
+                    }
+                }
+            });
         }
 
         //正規表達式 增加逗號
@@ -552,40 +599,39 @@ var Module = function () {
                 self.ajaxGetJson();
             });
         }
-    }, {
-        key: 'onClickPrev',
-        value: function onClickPrev() {
-            var self = this;
-            var $this = this.$ele;
-            $('.prev').on('click', function () {
-                $('.ntb_tab > .tab:first-child').css({
-                    "margin-left": "0%"
-                });
 
-                $this.find('.tab_active').prev().addClass('tab_active');
-                $this.find('.tab_active').children().children().css('color', '#e10500');
-                $this.find('.tab_active').next().children().children().css('color', '#666');
-                $this.find('.tab_active').next().removeClass('tab_active');
-                self.ajaxGetJson();
-            });
-        }
-    }, {
-        key: 'onClickNext',
-        value: function onClickNext() {
-            var self = this;
-            var $this = this.$ele;
-            $('.next').on('click', function () {
-                $('.ntb_tab > .tab:first-child').css({
-                    "margin-left": "-33.3%"
-                });
+        // onClickPrev() {
+        //     let self = this;
+        //     let $this = this.$ele;
+        //     $('.prev').on('click', function() {
+        //         // $('.ntb_tab > .tab:first-child').css({
+        //         //     "margin-left": "0%"
+        //         // });
 
-                $this.find('.tab_active').next().addClass('tab_active');
-                $this.find('.tab_active').children().children().css('color', '#e10500');
-                $this.find('.tab_active').prev().children().children().css('color', '#666');
-                $this.find('.tab_active').prev().removeClass('tab_active');
-                self.ajaxGetJson();
-            });
-        }
+        //         $this.find('.tab_active').prev().addClass('tab_active');
+        //         $this.find('.tab_active').children().children().css('color', '#e10500');
+        //         $this.find('.tab_active').next().children().children().css('color', '#666');
+        //         $this.find('.tab_active').next().removeClass('tab_active');
+        //         self.ajaxGetJson();
+        //     });
+        // }
+
+
+        // onClickNext() {
+        //     let self = this;
+        //     let $this = this.$ele;
+        //     $('.next').on('click', function() {
+        //         // $('.ntb_tab > .tab:first-child').css({
+        //         //     "margin-left": "-33.3%"
+        //         // });
+
+        //         $this.find('.tab_active').next().addClass('tab_active');
+        //         $this.find('.tab_active').children().children().css('color', '#e10500');
+        //         $this.find('.tab_active').prev().children().children().css('color', '#666');
+        //         $this.find('.tab_active').prev().removeClass('tab_active');
+        //         self.ajaxGetJson();
+        //     });
+        // }
 
         //切換列表 月曆顯示
 
