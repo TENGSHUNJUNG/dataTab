@@ -438,13 +438,11 @@ class Module {
     onClickMonth() {
         let self = this;
         let $this = this.$ele;
-        let $tab = this.$this.find('.tab');
-        let srcollWidth = this.$this.find('.tab').width();
 
 
-        $tab.on('click', function() {
-            $('.tab').removeClass('tab_active');
-            $('.tab').children().children().css('color', '#666');
+        $this.find('.tab').on('click', function() {
+            $this.find('.tab').removeClass('tab_active');
+            $this.find('.tab').children().children().css('color', '#666');
             $(this).addClass('tab_active');
             $(this).children().children().css('color', '#e10500');
             self.ajaxGetJson();
