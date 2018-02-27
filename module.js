@@ -208,7 +208,8 @@ var Module = function () {
         value: function init() {
             $('.container').append('<div class="changList col-md-12"><a href="#">' + '<p>切換列表顯示</p>' + '<p style="display:none;">切換月曆顯示</p>' + '</a></div>');
 
-            $('.calendar').append('<div class="calendars_tabWrap">' + '<a href="#" class="prev"></a>' + '<ul class="ntb_tab"></ul>' + '<a href="#" class="next"></a>' + '</div>' + '<div class="calendars_weeksWrap"></div>' + '<ul id="ul_wrap" class="dateTab_ul_wrap"></ul>' + '<div class="listPage_wrap d-no"></div>');
+            $('.calendar').append('<div class="calendars_tabWrap">' + '<a href="#" class="prev"></a>' + '<ul class="ntb_tab"></ul>' + '<a href="#" class="next"></a>' + '</div>' + '<div class="calendars_weeksWrap"></div>' + '<ul id="ul_wrap" class="dateTab_ul_wrap"></ul>' + '<div class="listPage_wrap d-no"><div class="listPage_box">' + '<div class="list_prev"><a href="#">«上一頁</a></div>' + '<div class="current_page"></div>' + '<div class="list_next"><a href="#">下一頁»</a></div>' + '</div></div>');
+
             this.self.creatMonth();
             this.self.ajaxGetJson();
             this.self.onClickMonth();
@@ -271,8 +272,6 @@ var Module = function () {
         value: function creatWeek() {
 
             this.$this.find('.calendars_weeksWrap').append('<span>星期日</span>' + '<span>星期一</span>' + '<span>星期二</span>' + '<span>星期三</span>' + '<span>星期四</span>' + '<span>星期五</span>' + '<span>星期六</span>' + '</div>');
-
-            this.$this.find('.listPage_wrap').append('<div class="listPage_box">' + '<div class="list_prev"><a href="#">«上一頁</a></div>' + '<div class="current_page"></div>' + '<div class="list_next"><a href="#">下一頁»</a></div>' + '</div>');
         }
     }, {
         key: 'creatMonth',
@@ -465,8 +464,6 @@ var Module = function () {
             var totalSize = $(".dateTab_listmode .hasData").length; //獲取總數據
             var totalPage = Math.ceil(totalSize / pageSize); //計算總頁數 ceil無條件進位
             $(".dateTab_listmode .hasData:gt(7)").addClass('d-no'); //設置首頁顯示8條數據
-            $(".dateTab_listmode .hasData:eq(7)").css('border-bottom', ' 1px solid #eee'); //第一頁最後一個加底線
-            $(".dateTab_listmode .hasData:last").css('border-bottom', ' 1px solid #eee'); //最後一筆資料加底線
             $(".total").text(totalPage); //設置總頁數
             $(".current_page").text(currentPage + '/' + totalPage); //設置當前頁數
 

@@ -174,7 +174,6 @@ $classname: 'dateTab';
             &>.#{$classname}_day {
                 cursor: pointer;
                 border: 1px solid #eee;
-                border-bottom: none;
                 @include clearfix;
                 &:hover{
 	                background-color: #fff9e3;

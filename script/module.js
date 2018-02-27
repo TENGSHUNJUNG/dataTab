@@ -28,7 +28,12 @@ class Module {
             '</div>' +
             '<div class="calendars_weeksWrap"></div>' +
             '<ul id="ul_wrap" class="dateTab_ul_wrap"></ul>' +
-            '<div class="listPage_wrap d-no"></div>');
+            '<div class="listPage_wrap d-no"><div class="listPage_box">' +
+            '<div class="list_prev"><a href="#">«上一頁</a></div>' +
+            '<div class="current_page"></div>' +
+            '<div class="list_next"><a href="#">下一頁»</a></div>' +
+            '</div></div>');
+
         this.self.creatMonth();
         this.self.ajaxGetJson();
         this.self.onClickMonth();
@@ -109,12 +114,6 @@ class Module {
             '<span>星期四</span>' +
             '<span>星期五</span>' +
             '<span>星期六</span>' +
-            '</div>');
-
-        this.$this.find('.listPage_wrap').append('<div class="listPage_box">' +
-            '<div class="list_prev"><a href="#">«上一頁</a></div>' +
-            '<div class="current_page"></div>' +
-            '<div class="list_next"><a href="#">下一頁»</a></div>' +
             '</div>');
     }
 
@@ -312,8 +311,6 @@ class Module {
         var totalSize = $(".dateTab_listmode .hasData").length; //獲取總數據
         var totalPage = Math.ceil(totalSize / pageSize); //計算總頁數 ceil無條件進位
         $(".dateTab_listmode .hasData:gt(7)").addClass('d-no'); //設置首頁顯示8條數據
-        $(".dateTab_listmode .hasData:eq(7)").css('border-bottom', ' 1px solid #eee'); //第一頁最後一個加底線
-        $(".dateTab_listmode .hasData:last").css('border-bottom', ' 1px solid #eee'); //最後一筆資料加底線
         $(".total").text(totalPage); //設置總頁數
         $(".current_page").text(currentPage + '/' + totalPage); //設置當前頁數
 
