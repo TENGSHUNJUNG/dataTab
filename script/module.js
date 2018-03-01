@@ -36,6 +36,7 @@ class Module {
 
         this.self.creatMonth();
         this.self.ajaxGetJson();
+        this.self.creatWeek();
         this.self.onClickMonth();
         // this.self.onClickNext();
         // this.self.onClickPrev();
@@ -134,7 +135,6 @@ class Module {
         $ntb_tab.append(html);
         this.$this.find('.tab:first-child ').addClass('tab_active');
         this.$this.find('.tab:first-child ').children().children().css('color', '#e10500');
-        this.self.creatWeek();
 
         //next箭頭
         this.$this.find('.next').on('click', function() {
@@ -154,6 +154,7 @@ class Module {
                     $this.find('.tab:first-child ').addClass('tab_active');
                     $this.find('.tab:first-child ').children().children().css('color', '#e10500');
                     self.ajaxGetJson();
+                    self.onClickMonth();
                 }
             }
 
@@ -177,6 +178,7 @@ class Module {
                     $this.find('.tab:nth-child(3) ').addClass('tab_active');
                     $this.find('.tab:nth-child(3) ').children().children().css('color', '#e10500');
                     self.ajaxGetJson();
+                    self.onClickMonth();
                 }
             }
         })
